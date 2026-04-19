@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const { type, title, formData, pdfUrl, paid } = await request.json();
+    const { type, title, formData } = await request.json();
 
     if (!VALID_TYPES.has(type)) {
       return NextResponse.json(
@@ -49,13 +49,16 @@ export async function POST(request: NextRequest) {
     }
     const safeTitle = title.slice(0, MAX_TITLE_LEN);
 
+    // Security: `paid` and `pdf_url` are NEVER trusted from client input.
+    // Both are only set by the Stripe webhook after a successful payment.
+    // Any incoming `paid` or `pdfUrl` in the body is silently ignored.
     const doc = await createDocument(
       userId,
       type,
       safeTitle,
       formData || {},
-      typeof pdfUrl === "string" ? pdfUrl : null,
-      !!paid
+      null, // pdf_url — set by webhook
+      false // paid — set by webhook
     );
     return NextResponse.json({ document: doc });
   } catch {

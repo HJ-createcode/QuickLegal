@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { getUserByEmail } from "./db";
+import { normalizeEmail } from "./email";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {
@@ -22,8 +23,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
-        const email = String(credentials.email).toLowerCase().trim();
+        const email = normalizeEmail(String(credentials.email));
         const password = String(credentials.password);
+        if (!email) return null;
 
         try {
           const user = await getUserByEmail(email);
@@ -40,8 +42,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               (user as unknown as { is_admin?: boolean }).is_admin
             ),
           } as unknown as { id: string; email: string; name?: string };
-        } catch (e) {
-          console.error("Auth error:", e);
+        } catch {
+          // Do not leak DB error details. Fail closed.
           return null;
         }
       },

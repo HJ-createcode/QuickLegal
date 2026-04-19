@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { createUser, getUserByEmail } from "@/lib/db";
+import { normalizeEmail } from "@/lib/email";
 
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MIN_PASSWORD_LEN = 10;
 
 function isStrongPassword(pwd: string): boolean {
@@ -27,10 +27,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const normalizedEmail = email.toLowerCase().trim();
+    const normalizedEmail = normalizeEmail(email);
     const trimmedName = name ? name.slice(0, 120).trim() : null;
 
-    if (!EMAIL_REGEX.test(normalizedEmail)) {
+    if (!normalizedEmail) {
       return NextResponse.json({ error: "Email invalide." }, { status: 400 });
     }
 

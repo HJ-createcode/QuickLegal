@@ -107,6 +107,22 @@ export async function getDocument(
   return rows[0] || null;
 }
 
+/**
+ * Admin-only: fetch any document by id regardless of owner, for SAV.
+ * Callers MUST check isAdmin before using this.
+ */
+export async function getDocumentAsAdmin(
+  id: string
+): Promise<DocumentRow | null> {
+  const sql = getSql();
+  const rows = (await sql`
+    SELECT * FROM documents
+    WHERE id = ${id}
+    LIMIT 1
+  `) as DocumentRow[];
+  return rows[0] || null;
+}
+
 export async function createDocument(
   userId: string,
   type: DocumentRow["type"],
@@ -124,6 +140,37 @@ export async function createDocument(
     RETURNING *
   `) as DocumentRow[];
   return rows[0];
+}
+
+/**
+ * Mark the most recent unpaid document of the given type for this user as
+ * paid. Idempotent on stripe_session_id so webhook retries are safe.
+ * Returns the document that was marked paid (or null if none matched).
+ */
+export async function markDocumentPaid(
+  userId: string,
+  type: DocumentRow["type"],
+  stripeSessionId: string,
+  priceCents: number | null
+): Promise<DocumentRow | null> {
+  const sql = getSql();
+  const rows = (await sql`
+    UPDATE documents
+    SET paid = TRUE,
+        price_cents = ${priceCents},
+        stripe_session_id = ${stripeSessionId}
+    WHERE id = (
+      SELECT id FROM documents
+      WHERE user_id = ${userId}
+        AND type = ${type}
+        AND (paid = FALSE OR paid IS NULL)
+        AND (stripe_session_id IS NULL OR stripe_session_id = ${stripeSessionId})
+      ORDER BY created_at DESC
+      LIMIT 1
+    )
+    RETURNING *
+  `) as DocumentRow[];
+  return rows[0] || null;
 }
 
 // ===== Admin queries =====

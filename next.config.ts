@@ -26,11 +26,13 @@ const securityHeaders = [
   {
     // Allow Stripe Checkout redirection and Vercel Blob downloads; keep the
     // rest tight. Inline scripts/styles remain allowed because Next.js injects
-    // them during hydration — tightening this further requires refactoring.
+    // small bootstrap scripts during hydration — tightening those to nonces
+    // requires refactoring every client component. 'unsafe-eval' is removed:
+    // production Next.js doesn't need it (only dev/React Refresh).
     key: "Content-Security-Policy",
     value: [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com",
+      "script-src 'self' 'unsafe-inline' https://js.stripe.com",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com data:",
       "img-src 'self' data: https: blob:",

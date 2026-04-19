@@ -83,8 +83,10 @@ export default async function AdminPage() {
       listAllUsersWithStats(),
       listAllDocumentsWithUser(),
     ]);
-  } catch (e) {
-    dbError = e instanceof Error ? e.message : "Erreur de base de données.";
+  } catch {
+    // Never surface raw DB error messages (host names, schema info, SQL text)
+    // to the UI — even to admins. Real error is in server logs only.
+    dbError = "Base de données temporairement indisponible.";
   }
 
   return (
@@ -308,9 +310,7 @@ export default async function AdminPage() {
                       <Td>
                         {d.pdf_url ? (
                           <a
-                            href={d.pdf_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                            href={`/api/documents/${d.id}/download`}
                             className="text-blue-500 hover:text-blue-600 font-medium"
                           >
                             Ouvrir
