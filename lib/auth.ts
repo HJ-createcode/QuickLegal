@@ -4,7 +4,13 @@ import bcrypt from "bcryptjs";
 import { getUserByEmail } from "./db";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  session: { strategy: "jwt" },
+  session: {
+    strategy: "jwt",
+    // Sessions expire after 7 days. A stolen token is only usable for 7 days,
+    // and we renew it on each request within that window.
+    maxAge: 7 * 24 * 60 * 60,
+    updateAge: 24 * 60 * 60,
+  },
   pages: {
     signIn: "/login",
   },

@@ -161,9 +161,7 @@ export default async function DashboardPage() {
                   <div className="flex gap-2">
                     {doc.pdf_url && (
                       <a
-                        href={doc.pdf_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        href={`/api/documents/${doc.id}/download`}
                         className="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium"
                       >
                         Télécharger

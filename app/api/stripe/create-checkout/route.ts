@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
 
 const PRICES: Record<string, { amount: number; label: string }> = {
   "statuts-sas": { amount: 7900, label: "Statuts de SAS" },
@@ -8,6 +9,16 @@ const PRICES: Record<string, { amount: number; label: string }> = {
 };
 
 export async function POST(request: NextRequest) {
+  // --- Authentication required ---
+  const session = await auth().catch(() => null);
+  const user = session?.user as { id?: string; email?: string } | undefined;
+  if (!user?.id) {
+    return NextResponse.json(
+      { error: "Authentification requise." },
+      { status: 401 }
+    );
+  }
+
   const stripeKey = process.env.STRIPE_SECRET_KEY;
 
   if (!stripeKey) {
@@ -32,17 +43,18 @@ export async function POST(request: NextRequest) {
     }
 
     const priceInfo = PRICES[type as string];
-    const title =
+    const rawTitle =
       (formData?.denomination as string) ||
       (formData?.partie_a_nom as string) ||
       priceInfo.label;
+    const title = String(rawTitle).slice(0, 120);
 
-    // Dynamic import to avoid requiring Stripe at build time when unused
     const StripeLib = (await import("stripe")).default;
     const stripe = new StripeLib(stripeKey);
 
-    const session = await stripe.checkout.sessions.create({
+    const checkoutSession = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
+      customer_email: user.email,
       line_items: [
         {
           price_data: {
@@ -62,12 +74,12 @@ export async function POST(request: NextRequest) {
       metadata: {
         document_type: type,
         title,
+        user_id: user.id,
       },
     });
 
-    return NextResponse.json({ url: session.url });
-  } catch (error) {
-    console.error("Stripe error:", error);
+    return NextResponse.json({ url: checkoutSession.url });
+  } catch {
     return NextResponse.json(
       { error: "Erreur lors de la création de la session de paiement." },
       { status: 500 }

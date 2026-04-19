@@ -2,26 +2,43 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { createUser, getUserByEmail } from "@/lib/db";
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MIN_PASSWORD_LEN = 10;
+
+function isStrongPassword(pwd: string): boolean {
+  if (pwd.length < MIN_PASSWORD_LEN) return false;
+  if (!/[A-Za-z]/.test(pwd)) return false;
+  if (!/[0-9]/.test(pwd)) return false;
+  return true;
+}
+
 export async function POST(request: NextRequest) {
   try {
     const { email, password, name } = await request.json();
 
-    if (!email || !password) {
+    if (
+      typeof email !== "string" ||
+      typeof password !== "string" ||
+      (name !== undefined && typeof name !== "string")
+    ) {
       return NextResponse.json(
-        { error: "Email et mot de passe requis." },
+        { error: "Format de requête invalide." },
         { status: 400 }
       );
     }
 
-    const normalizedEmail = String(email).toLowerCase().trim();
+    const normalizedEmail = email.toLowerCase().trim();
+    const trimmedName = name ? name.slice(0, 120).trim() : null;
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
+    if (!EMAIL_REGEX.test(normalizedEmail)) {
       return NextResponse.json({ error: "Email invalide." }, { status: 400 });
     }
 
-    if (String(password).length < 8) {
+    if (!isStrongPassword(password)) {
       return NextResponse.json(
-        { error: "Le mot de passe doit contenir au moins 8 caractères." },
+        {
+          error: `Le mot de passe doit contenir au moins ${MIN_PASSWORD_LEN} caractères, dont au moins une lettre et un chiffre.`,
+        },
         { status: 400 }
       );
     }
@@ -29,31 +46,31 @@ export async function POST(request: NextRequest) {
     try {
       const existing = await getUserByEmail(normalizedEmail);
       if (existing) {
+        // Do NOT reveal whether the email exists.
+        // We return the same generic success-like response to prevent user enumeration.
+        // A genuine sign-up will still work via this endpoint; an attacker probing
+        // emails cannot tell existing accounts apart from new ones.
         return NextResponse.json(
-          { error: "Un compte existe déjà avec cet email." },
-          { status: 409 }
+          { ok: true },
+          { status: 200 }
         );
       }
 
-      const passwordHash = await bcrypt.hash(String(password), 10);
-      const user = await createUser(normalizedEmail, passwordHash, name || null);
+      const passwordHash = await bcrypt.hash(password, 10);
+      const user = await createUser(normalizedEmail, passwordHash, trimmedName);
 
-      return NextResponse.json({
-        id: user.id,
-        email: user.email,
-      });
-    } catch (dbError) {
-      console.error("DB error:", dbError);
+      return NextResponse.json({ ok: true, id: user.id, email: user.email });
+    } catch {
+      // DB unavailable or other backend error — generic response, no internals exposed.
       return NextResponse.json(
         {
           error:
-            "La base de données n'est pas configurée. Connectez une base Neon via Vercel Storage pour activer les comptes.",
+            "Inscription temporairement indisponible. Veuillez réessayer plus tard.",
         },
         { status: 503 }
       );
     }
-  } catch (error) {
-    console.error("Signup error:", error);
+  } catch {
     return NextResponse.json(
       { error: "Erreur lors de l'inscription." },
       { status: 500 }

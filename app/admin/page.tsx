@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { auth, signOut } from "@/lib/auth";
 import {
   getAdminStats,
@@ -58,6 +59,18 @@ function formatDateTime(iso: string): string {
 
 export default async function AdminPage() {
   const session = await auth();
+  const sessionUser = session?.user as
+    | { id?: string; isAdmin?: boolean }
+    | undefined;
+
+  // Defense in depth: even if the proxy/middleware is bypassed, the page
+  // itself refuses to render for non-admin users.
+  if (!sessionUser?.id) {
+    redirect("/login?callbackUrl=/admin");
+  }
+  if (!sessionUser.isAdmin) {
+    redirect("/dashboard");
+  }
 
   let stats: AdminStats | null = null;
   let users: AdminUserRow[] = [];

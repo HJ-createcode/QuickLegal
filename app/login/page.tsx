@@ -6,10 +6,20 @@ import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { Suspense } from "react";
 
+// Only accept relative URLs starting with a single "/", to prevent open-redirect
+// attacks such as /login?callbackUrl=https://phishing.com.
+function safeCallbackUrl(raw: string | null): string {
+  if (!raw) return "/dashboard";
+  if (!raw.startsWith("/")) return "/dashboard";
+  if (raw.startsWith("//")) return "/dashboard";
+  if (raw.startsWith("/\\")) return "/dashboard";
+  return raw;
+}
+
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
+  const callbackUrl = safeCallbackUrl(searchParams.get("callbackUrl"));
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);

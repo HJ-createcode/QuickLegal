@@ -1,13 +1,53 @@
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
 import { generatePDF, type DocumentType } from "@/lib/pdf-generator";
 
-const VALID_TYPES: DocumentType[] = ["statuts-sas", "statuts-sci", "cgv-ecommerce", "nda"];
+const VALID_TYPES: DocumentType[] = [
+  "statuts-sas",
+  "statuts-sci",
+  "cgv-ecommerce",
+  "nda",
+];
+
+// Hard limit on text field length to prevent DoS / buffer abuse.
+const MAX_TEXT_LEN = 5000;
+const MAX_SHORT_LEN = 500;
+const MAX_ASSOCIES = 50;
+
+function tooLong(value: unknown, limit: number): boolean {
+  return typeof value === "string" && value.length > limit;
+}
+
+function validateInputLengths(data: Record<string, unknown>): string | null {
+  if (tooLong(data.denomination, MAX_SHORT_LEN)) return "Dénomination trop longue.";
+  if (tooLong(data.objet_social, MAX_TEXT_LEN)) return "Objet social trop long.";
+  if (tooLong(data.siege_social, MAX_SHORT_LEN)) return "Siège social trop long.";
+  if (tooLong(data.contexte, MAX_TEXT_LEN)) return "Contexte trop long.";
+  if (tooLong(data.nature_informations, MAX_TEXT_LEN))
+    return "Champ « nature des informations » trop long.";
+  if (tooLong(data.type_produits, MAX_SHORT_LEN)) return "Champ « type de produits » trop long.";
+  if (tooLong(data.partie_a_nom, MAX_SHORT_LEN)) return "Nom partie A trop long.";
+  if (tooLong(data.partie_b_nom, MAX_SHORT_LEN)) return "Nom partie B trop long.";
+  if (Array.isArray(data.associes_list) && data.associes_list.length > MAX_ASSOCIES) {
+    return `Nombre maximum d'associés dépassé (${MAX_ASSOCIES}).`;
+  }
+  return null;
+}
 
 export async function POST(request: NextRequest) {
+  // --- Authentication required ---
+  const session = await auth().catch(() => null);
+  const user = session?.user as { id?: string } | undefined;
+  if (!user?.id) {
+    return NextResponse.json(
+      { error: "Authentification requise." },
+      { status: 401 }
+    );
+  }
+
   try {
     const body = await request.json();
 
-    // Support both new format {type, data} and legacy (direct data for SAS)
     let type: DocumentType;
     let data: Record<string, unknown>;
 
@@ -26,11 +66,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Basic validation per type
+    // --- Length validation (DoS prevention) ---
+    const lengthError = validateInputLengths(data);
+    if (lengthError) {
+      return NextResponse.json({ error: lengthError }, { status: 400 });
+    }
+
+    // --- Per-document-type validation ---
     if (type === "statuts-sas" || type === "statuts-sci") {
       if (!data.denomination || !data.objet_social || !data.siege_social) {
         return NextResponse.json(
-          { error: "Données incomplètes. Veuillez remplir tous les champs obligatoires." },
+          {
+            error: "Données incomplètes. Veuillez remplir tous les champs obligatoires.",
+          },
           { status: 400 }
         );
       }
@@ -64,8 +112,8 @@ export async function POST(request: NextRequest) {
     const pdfBuffer = generatePDF(type, data);
     const uint8 = new Uint8Array(pdfBuffer);
 
-    const filename = (data.denomination || data.partie_a_nom || type) as string;
-    const safeName = filename.replace(/[^a-zA-Z0-9]/g, "_");
+    const filenameBase = (data.denomination || data.partie_a_nom || type) as string;
+    const safeName = filenameBase.slice(0, 60).replace(/[^a-zA-Z0-9]/g, "_");
 
     return new NextResponse(uint8, {
       status: 200,
@@ -74,8 +122,8 @@ export async function POST(request: NextRequest) {
         "Content-Disposition": `attachment; filename="${type}-${safeName}.pdf"`,
       },
     });
-  } catch (error) {
-    console.error("PDF generation error:", error);
+  } catch {
+    // Do not leak internal error details
     return NextResponse.json(
       { error: "Erreur lors de la génération du PDF." },
       { status: 500 }

@@ -30,7 +30,11 @@ export default function SignupPage() {
         throw new Error(data.error || "Erreur lors de la création du compte.");
       }
 
-      // Auto sign in after signup
+      // Auto sign in after signup. If the email was already in use (the API
+      // does not disclose this to prevent user enumeration), the credentials
+      // we just submitted will likely not match the existing account's
+      // password, so signIn will return an error. In that case, ask the user
+      // to log in manually.
       const result = await signIn("credentials", {
         email,
         password,
@@ -38,7 +42,9 @@ export default function SignupPage() {
       });
 
       if (result?.error) {
-        throw new Error("Compte créé, mais impossible de se connecter automatiquement.");
+        throw new Error(
+          "Inscription enregistrée. Merci de vous connecter avec vos identifiants."
+        );
       }
 
       router.push("/dashboard");
@@ -100,10 +106,13 @@ export default function SignupPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                minLength={8}
-                placeholder="Au moins 8 caractères"
+                minLength={10}
+                placeholder="Au moins 10 caractères, 1 lettre, 1 chiffre"
                 className="w-full px-3 py-2.5 rounded-lg bg-white border border-slate-200 text-slate-900 placeholder-slate-400"
               />
+              <p className="text-xs text-slate-500 mt-1.5">
+                10 caractères minimum, avec au moins une lettre et un chiffre.
+              </p>
             </div>
 
             {error && (
