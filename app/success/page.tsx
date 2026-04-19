@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
@@ -11,70 +11,89 @@ const TYPE_LABELS: Record<string, string> = {
   nda: "Accord de confidentialité",
 };
 
-const STORAGE_KEYS: Record<string, string> = {
-  "statuts-sas": "quicklegal_statuts_sas",
-  "statuts-sci": "quicklegal_statuts_sci",
-  "cgv-ecommerce": "quicklegal_cgv_ecommerce",
-  nda: "quicklegal_nda",
+const POLL_INTERVAL_MS = 2_000;
+const POLL_TIMEOUT_MS = 60_000;
+
+type DocStatus = {
+  id: string;
+  type: string;
+  title: string;
+  paid: boolean;
+  ready: boolean;
 };
 
 function SuccessContent() {
   const searchParams = useSearchParams();
-  const type = searchParams.get("type") || "statuts-sas";
-  const [downloading, setDownloading] = useState(false);
-  const [downloaded, setDownloaded] = useState(false);
+  const docId = searchParams.get("doc_id");
+  const [status, setStatus] = useState<DocStatus | null>(null);
   const [error, setError] = useState("");
-
-  const label = TYPE_LABELS[type] || "Document";
+  const [downloading, setDownloading] = useState(false);
+  const startedAtRef = useRef<number>(Date.now());
 
   useEffect(() => {
-    // Auto-trigger the download once on mount
-    handleDownload();
+    if (!docId) {
+      setError(
+        "Référence du document manquante. Rendez-vous dans votre espace pour le retrouver."
+      );
+      return;
+    }
+
+    let cancelled = false;
+
+    async function poll() {
+      while (!cancelled) {
+        try {
+          const res = await fetch(`/api/documents/${docId}/status`, {
+            cache: "no-store",
+          });
+          if (res.status === 404) {
+            setError("Document introuvable.");
+            return;
+          }
+          if (res.ok) {
+            const data = (await res.json()) as DocStatus;
+            setStatus(data);
+            if (data.ready) return;
+          }
+        } catch {
+          // transient network error, keep polling
+        }
+
+        if (Date.now() - startedAtRef.current > POLL_TIMEOUT_MS) {
+          setError(
+            "Votre document est en cours de préparation. Il apparaîtra dans votre espace dans un instant."
+          );
+          return;
+        }
+
+        await new Promise((r) => setTimeout(r, POLL_INTERVAL_MS));
+      }
+    }
+
+    poll();
+    return () => {
+      cancelled = true;
+    };
+  }, [docId]);
+
+  useEffect(() => {
+    if (status?.ready && !downloading) {
+      triggerDownload();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [status?.ready]);
 
-  async function handleDownload() {
+  async function triggerDownload() {
+    if (!docId) return;
     setDownloading(true);
-    setError("");
     try {
-      const key = STORAGE_KEYS[type];
-      const saved = key ? localStorage.getItem(key) : null;
-      if (!saved) {
-        throw new Error(
-          "Données du formulaire introuvables. Veuillez régénérer votre document."
-        );
-      }
-      const formData = JSON.parse(saved);
-
-      const res = await fetch("/api/generate-pdf", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type, data: formData }),
-      });
-
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || "Erreur de génération");
-      }
-
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      const name =
-        (formData.denomination as string) ||
-        (formData.partie_a_nom as string) ||
-        label;
-      a.download = `${type}-${name.replace(/[^a-zA-Z0-9]/g, "_")}.pdf`;
-      a.click();
-      URL.revokeObjectURL(url);
-      setDownloaded(true);
-    } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : "Erreur");
+      window.location.assign(`/api/documents/${docId}/download`);
     } finally {
       setDownloading(false);
     }
   }
+
+  const label = status ? TYPE_LABELS[status.type] || "Document" : "Document";
 
   return (
     <main className="min-h-screen flex items-center justify-center px-4 py-12 bg-gradient-to-b from-sky-50/60 via-white to-white">
@@ -95,34 +114,31 @@ function SuccessContent() {
           Paiement confirmé
         </h1>
         <p className="text-slate-600 mb-8">
-          Votre {label.toLowerCase()} est prêt. Le téléchargement a démarré automatiquement.
+          {status?.ready
+            ? `Votre ${label.toLowerCase()} est prêt. Le téléchargement a démarré.`
+            : "Nous préparons votre document. Cela prend quelques secondes."}
         </p>
 
         {error && (
-          <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
+          <div className="mb-4 p-3 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-sm">
             {error}
           </div>
         )}
 
-        {downloaded ? (
-          <div className="space-y-4">
-            <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700">
-              Document téléchargé avec succès.
-            </div>
-            <button
-              onClick={handleDownload}
-              className="w-full py-3 rounded-xl border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 font-medium transition text-sm"
-            >
-              Télécharger à nouveau
-            </button>
+        {!status?.ready && !error && (
+          <div className="flex items-center justify-center gap-3 text-slate-500 text-sm mb-6">
+            <div className="w-4 h-4 border-2 border-slate-300 border-t-blue-500 rounded-full animate-spin" />
+            <span>Génération en cours…</span>
           </div>
-        ) : (
+        )}
+
+        {status?.ready && (
           <button
-            onClick={handleDownload}
+            onClick={triggerDownload}
             disabled={downloading}
             className="w-full py-3.5 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-semibold text-lg shadow-md transition disabled:opacity-50"
           >
-            {downloading ? "Génération du PDF..." : "Télécharger mon document"}
+            {downloading ? "Téléchargement…" : "Télécharger mon document"}
           </button>
         )}
 
@@ -132,9 +148,10 @@ function SuccessContent() {
             <li>Relisez attentivement votre document</li>
             <li>Faites signer chaque partie concernée</li>
             <li>Conservez un exemplaire original</li>
-            {(type === "statuts-sas" || type === "statuts-sci") && (
-              <li>Déposez le dossier d&apos;immatriculation au guichet unique INPI</li>
-            )}
+            {status &&
+              (status.type === "statuts-sas" || status.type === "statuts-sci") && (
+                <li>Déposez le dossier d&apos;immatriculation au guichet unique INPI</li>
+              )}
           </ul>
         </div>
 

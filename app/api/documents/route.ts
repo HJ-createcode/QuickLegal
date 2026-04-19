@@ -1,8 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { createDocument, listUserDocuments } from "@/lib/db";
+import {
+  createDocument,
+  listUserDocuments,
+  countUnpaidDrafts,
+  MAX_UNPAID_DRAFTS_PER_USER,
+} from "@/lib/db";
 
 const MAX_TITLE_LEN = 200;
+// form_data is stored verbatim as JSONB; cap it to prevent a single user
+// from bloating the table with multi-MB blobs.
+const MAX_FORM_DATA_BYTES = 50_000;
 const VALID_TYPES = new Set([
   "statuts-sas",
   "statuts-sci",
@@ -48,6 +56,24 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Titre requis." }, { status: 400 });
     }
     const safeTitle = title.slice(0, MAX_TITLE_LEN);
+
+    const serialized = JSON.stringify(formData || {});
+    if (serialized.length > MAX_FORM_DATA_BYTES) {
+      return NextResponse.json(
+        { error: "Les données du formulaire dépassent la taille autorisée." },
+        { status: 413 }
+      );
+    }
+
+    const drafts = await countUnpaidDrafts(userId);
+    if (drafts >= MAX_UNPAID_DRAFTS_PER_USER) {
+      return NextResponse.json(
+        {
+          error: `Vous avez atteint la limite de ${MAX_UNPAID_DRAFTS_PER_USER} brouillons non payés. Finalisez ou supprimez-en avant d'en créer un nouveau.`,
+        },
+        { status: 429 }
+      );
+    }
 
     // Security: `paid` and `pdf_url` are NEVER trusted from client input.
     // Both are only set by the Stripe webhook after a successful payment.

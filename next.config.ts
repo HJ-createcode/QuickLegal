@@ -24,6 +24,16 @@ const securityHeaders = [
     value: "off",
   },
   {
+    // Best-effort cross-origin isolation: the app never embeds third-party
+    // resources that need to be cross-origin-opener-openable.
+    key: "Cross-Origin-Opener-Policy",
+    value: "same-origin",
+  },
+  {
+    key: "Cross-Origin-Resource-Policy",
+    value: "same-origin",
+  },
+  {
     // Allow Stripe Checkout redirection and Vercel Blob downloads; keep the
     // rest tight. Inline scripts/styles remain allowed because Next.js injects
     // small bootstrap scripts during hydration — tightening those to nonces

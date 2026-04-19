@@ -4,6 +4,13 @@ import bcrypt from "bcryptjs";
 import { getUserByEmail } from "./db";
 import { normalizeEmail } from "./email";
 
+// Pre-computed bcrypt hash of a random unguessable string. Used to equalize
+// the timing of failed logins: if the email is unknown we still run one
+// bcrypt.compare against this hash so a remote attacker can't distinguish
+// "email does not exist" from "email exists but wrong password" by timing.
+const DUMMY_PASSWORD_HASH =
+  "$2b$10$CwTycUXWue0Thq9StjUM0uJ8o6FQG3HYQ8nGjGqPkQpQ8sGrlFqEu";
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {
     strategy: "jwt",
@@ -29,7 +36,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         try {
           const user = await getUserByEmail(email);
-          if (!user) return null;
+          if (!user) {
+            // Constant-time branch: run a dummy bcrypt.compare so the absence
+            // of a user takes roughly the same time as a wrong password.
+            await bcrypt.compare(password, DUMMY_PASSWORD_HASH);
+            return null;
+          }
 
           const valid = await bcrypt.compare(password, user.password_hash);
           if (!valid) return null;

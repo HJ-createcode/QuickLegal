@@ -84,14 +84,33 @@ export async function createUser(
   return rows[0];
 }
 
+// Maximum rows returned by listUserDocuments. Older documents remain in the
+// database; they are not exposed via this endpoint but remain available to
+// admins. Keeps payload bounded and protects against self-inflicted DoS.
+export const USER_DOCUMENTS_LIMIT = 100;
+
+// Maximum concurrent unpaid drafts a user can accumulate. Prevents a single
+// authenticated user from flooding the documents table.
+export const MAX_UNPAID_DRAFTS_PER_USER = 50;
+
 export async function listUserDocuments(userId: string): Promise<DocumentRow[]> {
   const sql = getSql();
   const rows = (await sql`
     SELECT * FROM documents
     WHERE user_id = ${userId}
     ORDER BY created_at DESC
+    LIMIT ${USER_DOCUMENTS_LIMIT}
   `) as DocumentRow[];
   return rows;
+}
+
+export async function countUnpaidDrafts(userId: string): Promise<number> {
+  const sql = getSql();
+  const rows = (await sql`
+    SELECT COUNT(*)::int AS n FROM documents
+    WHERE user_id = ${userId} AND (paid = FALSE OR paid IS NULL)
+  `) as { n: number }[];
+  return rows[0]?.n ?? 0;
 }
 
 export async function getDocument(
@@ -168,6 +187,32 @@ export async function markDocumentPaid(
       ORDER BY created_at DESC
       LIMIT 1
     )
+    RETURNING *
+  `) as DocumentRow[];
+  return rows[0] || null;
+}
+
+/**
+ * Finalize a document payment by id: set paid=true, store the Blob URL of the
+ * generated PDF, and record the Stripe session & amount. Only the Stripe
+ * webhook should call this — it looks the document up by id from the session
+ * metadata. Idempotent on stripe_session_id.
+ */
+export async function finalizeDocumentPayment(
+  docId: string,
+  stripeSessionId: string,
+  priceCents: number | null,
+  pdfUrl: string
+): Promise<DocumentRow | null> {
+  const sql = getSql();
+  const rows = (await sql`
+    UPDATE documents
+    SET paid = TRUE,
+        price_cents = ${priceCents},
+        stripe_session_id = ${stripeSessionId},
+        pdf_url = ${pdfUrl}
+    WHERE id = ${docId}
+      AND (stripe_session_id IS NULL OR stripe_session_id = ${stripeSessionId})
     RETURNING *
   `) as DocumentRow[];
   return rows[0] || null;

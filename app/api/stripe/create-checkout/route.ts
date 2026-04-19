@@ -1,5 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
+import {
+  createDocument,
+  countUnpaidDrafts,
+  MAX_UNPAID_DRAFTS_PER_USER,
+  type DocumentRow,
+} from "@/lib/db";
 
 const PRICES: Record<string, { amount: number; label: string }> = {
   "statuts-sas": { amount: 7900, label: "Statuts de SAS" },
@@ -7,6 +13,8 @@ const PRICES: Record<string, { amount: number; label: string }> = {
   "cgv-ecommerce": { amount: 4900, label: "CGV E-commerce" },
   nda: { amount: 3900, label: "Accord de confidentialité (NDA)" },
 };
+
+const MAX_FORM_DATA_BYTES = 50_000;
 
 export async function POST(request: NextRequest) {
   // --- Authentication required ---
@@ -49,6 +57,47 @@ export async function POST(request: NextRequest) {
       priceInfo.label;
     const title = String(rawTitle).slice(0, 120);
 
+    // Validate form_data size before persisting. Stored in JSONB so we cap it
+    // to keep table growth bounded.
+    const serialized = JSON.stringify(formData || {});
+    if (serialized.length > MAX_FORM_DATA_BYTES) {
+      return NextResponse.json(
+        { error: "Les données du formulaire dépassent la taille autorisée." },
+        { status: 413 }
+      );
+    }
+
+    // Per-user cap on unpaid drafts. A malicious logged-in user cannot flood
+    // the documents table by spamming checkout creation.
+    const drafts = await countUnpaidDrafts(user.id);
+    if (drafts >= MAX_UNPAID_DRAFTS_PER_USER) {
+      return NextResponse.json(
+        {
+          error: `Limite de ${MAX_UNPAID_DRAFTS_PER_USER} brouillons non payés atteinte.`,
+        },
+        { status: 429 }
+      );
+    }
+
+    // Persist a draft BEFORE creating the Stripe session so the webhook can
+    // reliably look it up by id and produce/upload the final PDF.
+    let draft: DocumentRow;
+    try {
+      draft = await createDocument(
+        user.id,
+        type as DocumentRow["type"],
+        title,
+        (formData as Record<string, unknown>) || {},
+        null, // pdf_url — filled by the webhook after upload
+        false
+      );
+    } catch {
+      return NextResponse.json(
+        { error: "Service temporairement indisponible." },
+        { status: 503 }
+      );
+    }
+
     const StripeLib = (await import("stripe")).default;
     const stripe = new StripeLib(stripeKey);
 
@@ -73,10 +122,11 @@ export async function POST(request: NextRequest) {
         },
       ],
       mode: "payment",
-      success_url: `${appUrl}/success?type=${encodeURIComponent(type)}&session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${appUrl}/success?doc_id=${draft.id}&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${appUrl}/documents/${type}`,
       metadata: {
         document_type: type,
+        document_id: draft.id,
         title,
         user_id: user.id,
       },
