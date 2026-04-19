@@ -79,6 +79,8 @@ const guarantees = [
 
 export default async function HomePage() {
   const session = await auth().catch(() => null);
+  const sessionUser = session?.user as { id?: string } | undefined;
+  const isLoggedIn = !!sessionUser?.id;
 
   return (
     <main>
@@ -102,7 +104,7 @@ export default async function HomePage() {
             </a>
           </div>
           <div className="flex items-center gap-3">
-            {session?.user ? (
+            {isLoggedIn ? (
               <Link
                 href="/dashboard"
                 className="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium shadow-sm"
