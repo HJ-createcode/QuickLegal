@@ -27,7 +27,10 @@ export async function GET() {
 
   try {
     const docs = await listUserDocuments(userId);
-    return NextResponse.json({ documents: docs });
+    return NextResponse.json(
+      { documents: docs },
+      { headers: { "Cache-Control": "private, no-store" } }
+    );
   } catch {
     return NextResponse.json(
       { error: "Service temporairement indisponible." },

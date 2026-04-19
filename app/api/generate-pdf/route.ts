@@ -13,6 +13,10 @@ const VALID_TYPES: DocumentType[] = [
 const MAX_TEXT_LEN = 5000;
 const MAX_SHORT_LEN = 500;
 const MAX_ASSOCIES = 50;
+// Total JSON size cap. Individual text fields are also capped below, but a
+// single top-level cap defends against a payload that stuffs unknown or
+// unchecked fields with MB of data.
+const MAX_BODY_BYTES = 50_000;
 
 function tooLong(value: unknown, limit: number): boolean {
   return typeof value === "string" && value.length > limit;
@@ -46,7 +50,14 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const body = await request.json();
+    const rawBody = await request.text();
+    if (rawBody.length > MAX_BODY_BYTES) {
+      return NextResponse.json(
+        { error: "Requête trop volumineuse." },
+        { status: 413 }
+      );
+    }
+    const body = JSON.parse(rawBody);
 
     let type: DocumentType;
     let data: Record<string, unknown>;

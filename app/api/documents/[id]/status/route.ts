@@ -27,13 +27,16 @@ export async function GET(_request: NextRequest, context: RouteContext) {
     if (!doc) {
       return NextResponse.json({ error: "Introuvable." }, { status: 404 });
     }
-    return NextResponse.json({
-      id: doc.id,
-      type: doc.type,
-      title: doc.title,
-      paid: doc.paid,
-      ready: !!doc.pdf_url,
-    });
+    return NextResponse.json(
+      {
+        id: doc.id,
+        type: doc.type,
+        title: doc.title,
+        paid: doc.paid,
+        ready: !!doc.pdf_url,
+      },
+      { headers: { "Cache-Control": "private, no-store" } }
+    );
   } catch {
     return NextResponse.json(
       { error: "Service temporairement indisponible." },

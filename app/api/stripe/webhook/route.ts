@@ -49,10 +49,22 @@ function sanitizeSlug(s: string): string {
 export async function POST(request: NextRequest) {
   const stripeKey = process.env.STRIPE_SECRET_KEY;
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  const blobToken = process.env.BLOB_READ_WRITE_TOKEN;
 
   if (!stripeKey || !webhookSecret) {
     return NextResponse.json(
       { error: "Webhook Stripe non configuré." },
+      { status: 503 }
+    );
+  }
+
+  // If Blob storage is missing, the finalization step will fail mid-flow,
+  // leaving Stripe to retry for days without the customer getting their PDF.
+  // Fail fast with a 503 so the misconfiguration is visible in Stripe's
+  // dashboard and caught before the signature check consumes the body.
+  if (!blobToken) {
+    return NextResponse.json(
+      { error: "Stockage Blob non configuré." },
       { status: 503 }
     );
   }
