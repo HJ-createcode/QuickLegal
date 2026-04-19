@@ -35,18 +35,18 @@ ALTER TABLE documents ADD COLUMN IF NOT EXISTS price_cents INTEGER;
 ALTER TABLE documents ADD COLUMN IF NOT EXISTS stripe_session_id TEXT;
 
 -- ==============================================================
--- COMPTE ADMIN : à exécuter une seule fois après la création des tables
--- Identifiant : hugo.jentile@gmail.com
--- Mot de passe : AdminQL99!
--- Le hash ci-dessous est un bcrypt de 'AdminQL99!' avec 10 rounds.
+-- BOOTSTRAP ADMIN
 -- ==============================================================
-INSERT INTO users (email, password_hash, name, is_admin)
-VALUES (
-  'hugo.jentile@gmail.com',
-  '$2b$10$yrkq56H8u3PKgS1ykYQYR./l4/oEcLSYeBzH6kdNd4IC8Y5ACyuni',
-  'Hugo Jentile',
-  TRUE
-)
-ON CONFLICT (email) DO UPDATE SET
-  password_hash = EXCLUDED.password_hash,
-  is_admin = TRUE;
+-- Ne commettez JAMAIS un mot de passe (ou son hash) dans ce dépôt.
+-- Pour créer ou promouvoir un compte administrateur :
+--
+-- 1. Créez le compte via l'interface publique /signup, puis
+-- 2. Exécutez dans la console Neon (ou `psql`) :
+--
+--      UPDATE users SET is_admin = TRUE WHERE email = 'votre@email.fr';
+--
+-- Pour changer un mot de passe, générez un hash bcrypt localement
+-- (`node -e "console.log(require('bcryptjs').hashSync('NOUVEAU_MDP', 10))"`)
+-- puis :
+--
+--      UPDATE users SET password_hash = '$2b$10$...' WHERE email = '...';

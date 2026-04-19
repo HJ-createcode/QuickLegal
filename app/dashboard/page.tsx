@@ -38,8 +38,9 @@ export default async function DashboardPage() {
   if (userId) {
     try {
       documents = await listUserDocuments(userId);
-    } catch (e) {
-      dbError = e instanceof Error ? e.message : "Erreur de base de données.";
+    } catch {
+      // Never surface raw DB error details (host, schema, SQL text) to the UI.
+      dbError = "Service temporairement indisponible.";
     }
   }
 
@@ -95,9 +96,7 @@ export default async function DashboardPage() {
 
         {dbError && (
           <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-sm mb-6">
-            <strong>Base de données non connectée.</strong> {dbError}
-            <br />
-            Ajoutez <code>DATABASE_URL</code> dans vos variables d&apos;environnement (via Vercel Storage &gt; Neon).
+            {dbError}
           </div>
         )}
 

@@ -4,9 +4,14 @@ import { createUser, getUserByEmail } from "@/lib/db";
 import { normalizeEmail } from "@/lib/email";
 
 const MIN_PASSWORD_LEN = 10;
+// bcrypt silently truncates passwords at 72 bytes. Reject long passwords at
+// the boundary so we never store a password whose tail the user thinks is
+// protecting their account.
+const MAX_PASSWORD_LEN = 72;
 
 function isStrongPassword(pwd: string): boolean {
   if (pwd.length < MIN_PASSWORD_LEN) return false;
+  if (pwd.length > MAX_PASSWORD_LEN) return false;
   if (!/[A-Za-z]/.test(pwd)) return false;
   if (!/[0-9]/.test(pwd)) return false;
   return true;
@@ -37,7 +42,7 @@ export async function POST(request: NextRequest) {
     if (!isStrongPassword(password)) {
       return NextResponse.json(
         {
-          error: `Le mot de passe doit contenir au moins ${MIN_PASSWORD_LEN} caractères, dont au moins une lettre et un chiffre.`,
+          error: `Le mot de passe doit contenir entre ${MIN_PASSWORD_LEN} et ${MAX_PASSWORD_LEN} caractères, dont au moins une lettre et un chiffre.`,
         },
         { status: 400 }
       );

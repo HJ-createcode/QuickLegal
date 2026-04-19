@@ -35,7 +35,7 @@ const securityHeaders = [
       "script-src 'self' 'unsafe-inline' https://js.stripe.com",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com data:",
-      "img-src 'self' data: https: blob:",
+      "img-src 'self' data: blob: https://*.public.blob.vercel-storage.com",
       "connect-src 'self' https://api.stripe.com https://*.vercel-storage.com",
       "frame-src https://js.stripe.com https://hooks.stripe.com https://checkout.stripe.com",
       "form-action 'self' https://checkout.stripe.com",

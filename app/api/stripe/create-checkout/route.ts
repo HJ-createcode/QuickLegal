@@ -52,6 +52,10 @@ export async function POST(request: NextRequest) {
     const StripeLib = (await import("stripe")).default;
     const stripe = new StripeLib(stripeKey);
 
+    // Prefer a pinned app URL (defense in depth against spoofed Host headers
+    // on non-Vercel deployments). Fall back to the request origin.
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") || request.nextUrl.origin;
+
     const checkoutSession = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       customer_email: user.email,
@@ -69,8 +73,8 @@ export async function POST(request: NextRequest) {
         },
       ],
       mode: "payment",
-      success_url: `${request.nextUrl.origin}/success?type=${encodeURIComponent(type)}&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${request.nextUrl.origin}/documents/${type}`,
+      success_url: `${appUrl}/success?type=${encodeURIComponent(type)}&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${appUrl}/documents/${type}`,
       metadata: {
         document_type: type,
         title,
