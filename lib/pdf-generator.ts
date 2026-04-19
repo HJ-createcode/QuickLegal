@@ -1,6 +1,57 @@
 import { jsPDF } from "jspdf";
-import type { StatutsSASData } from "./questionnaire-config";
-import { generateStatutsSAS } from "./statuts-sas-template";
+import type { StatutsSASData } from "./questionnaire-configs/statuts-sas";
+import type { StatutsSCIData } from "./questionnaire-configs/statuts-sci";
+import type { CGVEcommerceData } from "./questionnaire-configs/cgv-ecommerce";
+import type { NDAData } from "./questionnaire-configs/nda";
+import { generateStatutsSAS } from "./templates/statuts-sas";
+import { generateStatutsSCI } from "./templates/statuts-sci";
+import { generateCGVEcommerce } from "./templates/cgv-ecommerce";
+import { generateNDA } from "./templates/nda";
+
+export type DocumentType = "statuts-sas" | "statuts-sci" | "cgv-ecommerce" | "nda";
+
+export interface DocumentMeta {
+  title: string;
+  subtitle: string;
+}
+
+function getMeta(type: DocumentType, data: Record<string, unknown>): DocumentMeta {
+  switch (type) {
+    case "statuts-sas":
+      return {
+        title: (data.denomination as string) || "Société",
+        subtitle: "Statuts de SAS",
+      };
+    case "statuts-sci":
+      return {
+        title: (data.denomination as string) || "SCI",
+        subtitle: "Statuts de SCI",
+      };
+    case "cgv-ecommerce":
+      return {
+        title: (data.denomination as string) || "Boutique",
+        subtitle: "Conditions Générales de Vente",
+      };
+    case "nda":
+      return {
+        title: (data.partie_a_nom as string) || "NDA",
+        subtitle: "Accord de confidentialité",
+      };
+  }
+}
+
+function generateContent(type: DocumentType, data: Record<string, unknown>): string {
+  switch (type) {
+    case "statuts-sas":
+      return generateStatutsSAS(data as unknown as StatutsSASData);
+    case "statuts-sci":
+      return generateStatutsSCI(data as unknown as StatutsSCIData);
+    case "cgv-ecommerce":
+      return generateCGVEcommerce(data as unknown as CGVEcommerceData);
+    case "nda":
+      return generateNDA(data as unknown as NDAData);
+  }
+}
 
 const MARGIN_LEFT = 25;
 const MARGIN_RIGHT = 25;
@@ -10,9 +61,34 @@ const LINE_HEIGHT = 6;
 const PAGE_WIDTH = 210;
 const CONTENT_WIDTH = PAGE_WIDTH - MARGIN_LEFT - MARGIN_RIGHT;
 
-export function generateStatutsPDF(data: StatutsSASData): Buffer {
+/**
+ * Sanitize text for jsPDF's WinANSI encoding.
+ * jsPDF's default Helvetica handles most French accents (é, è, à, etc.)
+ * but has issues with certain Unicode characters.
+ */
+function sanitizeForPDF(text: string): string {
+  return text
+    // Typographic quotes and guillemets: jsPDF handles « » but not « »  with thin spaces
+    .replace(/\u00A0/g, " ") // Non-breaking space -> regular space
+    .replace(/\u202F/g, " ") // Narrow no-break space -> regular space
+    .replace(/\u2009/g, " ") // Thin space -> regular space
+    // Dashes
+    .replace(/[\u2013\u2014]/g, "-") // em/en dash -> hyphen
+    // Ellipsis
+    .replace(/\u2026/g, "...")
+    // Smart quotes
+    .replace(/[\u2018\u2019]/g, "'")
+    .replace(/[\u201C\u201D]/g, '"');
+}
+
+export function generatePDF(
+  type: DocumentType,
+  data: Record<string, unknown>
+): Buffer {
   const doc = new jsPDF({ unit: "mm", format: "a4" });
-  const text = generateStatutsSAS(data);
+  const meta = getMeta(type, data);
+  const rawText = generateContent(type, data);
+  const text = sanitizeForPDF(rawText);
 
   let y = MARGIN_TOP;
   let pageNum = 1;
@@ -22,7 +98,7 @@ export function generateStatutsPDF(data: StatutsSASData): Buffer {
     doc.setFontSize(8);
     doc.setTextColor(150, 150, 150);
     doc.text(`Page ${pageNum}`, PAGE_WIDTH / 2, 290, { align: "center" });
-    doc.text(`${data.denomination.toUpperCase()} — Statuts`, MARGIN_LEFT, 290);
+    doc.text(`${meta.title.toUpperCase()} - ${meta.subtitle}`, MARGIN_LEFT, 290);
   }
 
   function addWatermark() {
@@ -45,7 +121,6 @@ export function generateStatutsPDF(data: StatutsSASData): Buffer {
     }
   }
 
-  // Process text line by line
   const lines = text.split("\n");
 
   for (const line of lines) {
@@ -58,7 +133,12 @@ export function generateStatutsPDF(data: StatutsSASData): Buffer {
     }
 
     // TITLE LINES (all uppercase, long enough)
-    if (trimmed === trimmed.toUpperCase() && trimmed.length > 10 && !trimmed.startsWith("-") && !trimmed.startsWith("[")) {
+    if (
+      trimmed === trimmed.toUpperCase() &&
+      trimmed.length > 10 &&
+      !trimmed.startsWith("-") &&
+      !trimmed.startsWith("[")
+    ) {
       checkNewPage(LINE_HEIGHT * 3);
       y += LINE_HEIGHT;
       doc.setFont("helvetica", "bold");
@@ -76,7 +156,14 @@ export function generateStatutsPDF(data: StatutsSASData): Buffer {
     }
 
     // ARTICLE HEADERS
-    if (trimmed.startsWith("Article ") || trimmed.startsWith("TITRE ") || trimmed.startsWith("DESIGNATION")) {
+    if (
+      trimmed.startsWith("Article ") ||
+      trimmed.startsWith("TITRE ") ||
+      trimmed.startsWith("DÉSIGNATION") ||
+      trimmed.startsWith("DESIGNATION") ||
+      trimmed.startsWith("PRÉAMBULE") ||
+      trimmed.startsWith("PREAMBULE")
+    ) {
       checkNewPage(LINE_HEIGHT * 4);
       y += LINE_HEIGHT;
       doc.setFont("helvetica", "bold");
@@ -88,7 +175,10 @@ export function generateStatutsPDF(data: StatutsSASData): Buffer {
         doc.text(headerParts[0] + " -", MARGIN_LEFT, y);
         y += LINE_HEIGHT;
         doc.setFont("helvetica", "bolditalic");
-        const subLines = doc.splitTextToSize(headerParts.slice(1).join(" - "), CONTENT_WIDTH);
+        const subLines = doc.splitTextToSize(
+          headerParts.slice(1).join(" - "),
+          CONTENT_WIDTH
+        );
         for (const sl of subLines) {
           checkNewPage();
           doc.text(sl, MARGIN_LEFT, y);
@@ -107,14 +197,16 @@ export function generateStatutsPDF(data: StatutsSASData): Buffer {
     }
 
     // SIGNATURE HINT
-    if (trimmed === "(signature precedee de la mention \"Lu et approuve\")") {
+    if (
+      trimmed.startsWith("(signature précédée") ||
+      trimmed.startsWith("(signature precedee")
+    ) {
       doc.setFont("helvetica", "italic");
       doc.setFontSize(9);
       doc.setTextColor(120, 120, 120);
       checkNewPage();
       doc.text(trimmed, MARGIN_LEFT, y);
       y += LINE_HEIGHT;
-      // Add signature line
       y += LINE_HEIGHT * 2;
       doc.setDrawColor(180, 180, 180);
       doc.line(MARGIN_LEFT, y, MARGIN_LEFT + 60, y);
@@ -164,11 +256,14 @@ export function generateStatutsPDF(data: StatutsSASData): Buffer {
     }
   }
 
-  // Last page footer
   addPageNumber();
   addWatermark();
 
-  // Return as buffer
   const arrayBuffer = doc.output("arraybuffer");
   return Buffer.from(arrayBuffer);
+}
+
+// Legacy export for backwards compatibility
+export function generateStatutsPDF(data: StatutsSASData): Buffer {
+  return generatePDF("statuts-sas", data as unknown as Record<string, unknown>);
 }
