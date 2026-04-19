@@ -1,24 +1,6 @@
 import Link from "next/link";
 import { auth } from "@/lib/auth";
 
-const steps = [
-  {
-    num: "01",
-    title: "Répondez au questionnaire",
-    desc: "Un parcours guidé, étape par étape. Nos questions vous dispensent du jargon juridique.",
-  },
-  {
-    num: "02",
-    title: "Votre document est généré",
-    desc: "Notre moteur intègre vos réponses dans un modèle rédigé par des juristes et revu par un avocat d'affaires inscrit au Barreau de Paris.",
-  },
-  {
-    num: "03",
-    title: "Téléchargez votre PDF",
-    desc: "Vous obtenez un document juridique complet, conforme au RGPD, prêt à être signé et déposé.",
-  },
-];
-
 const documents = [
   {
     title: "Statuts de SAS",
@@ -96,9 +78,9 @@ export default async function HomePage() {
             <a href="#documents" className="text-slate-600 hover:text-slate-900">
               Documents
             </a>
-            <a href="#comment-ca-marche" className="text-slate-600 hover:text-slate-900">
+            <Link href="/comment-ca-marche" className="text-slate-600 hover:text-slate-900">
               Comment ça marche
-            </a>
+            </Link>
             <a href="#garanties" className="text-slate-600 hover:text-slate-900">
               Garanties
             </a>
@@ -161,7 +143,7 @@ export default async function HomePage() {
               Découvrir nos documents
             </Link>
             <Link
-              href="#comment-ca-marche"
+              href="/comment-ca-marche"
               className="px-8 py-3.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-white text-slate-900 font-medium text-base"
             >
               Comment ça marche
@@ -256,28 +238,15 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* HOW IT WORKS */}
-      <section id="comment-ca-marche" className="py-24 px-6 bg-gradient-to-b from-white via-sky-50/50 to-white">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-blue-500 text-sm font-semibold uppercase tracking-widest mb-3">
-              Procédure
-            </p>
-            <h2 className="font-serif text-4xl sm:text-5xl font-bold mb-4 text-slate-900">
-              Trois étapes, zéro friction
-            </h2>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {steps.map((step) => (
-              <div key={step.num} className="relative p-8 rounded-2xl bg-white border border-slate-200 shadow-premium">
-                <div className="font-serif text-5xl font-bold text-blue-200 mb-4">
-                  {step.num}
-                </div>
-                <h3 className="font-serif text-xl font-semibold mb-3 text-slate-900">{step.title}</h3>
-                <p className="text-slate-600 text-sm leading-relaxed">{step.desc}</p>
-              </div>
-            ))}
-          </div>
+      {/* HOW IT WORKS — LINK */}
+      <section className="py-20 px-6 bg-gradient-to-b from-white via-sky-50/50 to-white">
+        <div className="max-w-3xl mx-auto text-center">
+          <Link
+            href="/comment-ca-marche"
+            className="inline-block px-8 py-3.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-white text-slate-900 font-medium text-base shadow-sm"
+          >
+            Comment ça marche
+          </Link>
         </div>
       </section>
 
