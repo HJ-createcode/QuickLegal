@@ -3,23 +3,38 @@ import { NextResponse } from "next/server";
 
 export default auth((req) => {
   const isLoggedIn = !!req.auth;
-  const isDashboard = req.nextUrl.pathname.startsWith("/dashboard");
-  const isAuthPage =
-    req.nextUrl.pathname === "/login" || req.nextUrl.pathname === "/signup";
+  const isAdmin = !!(req.auth?.user as unknown as { isAdmin?: boolean })?.isAdmin;
+  const pathname = req.nextUrl.pathname;
+
+  const isDashboard = pathname.startsWith("/dashboard");
+  const isAdminArea = pathname.startsWith("/admin");
+  const isAuthPage = pathname === "/login" || pathname === "/signup";
 
   if (isDashboard && !isLoggedIn) {
     const loginUrl = new URL("/login", req.nextUrl.origin);
-    loginUrl.searchParams.set("callbackUrl", req.nextUrl.pathname);
+    loginUrl.searchParams.set("callbackUrl", pathname);
     return NextResponse.redirect(loginUrl);
   }
 
+  if (isAdminArea) {
+    if (!isLoggedIn) {
+      const loginUrl = new URL("/login", req.nextUrl.origin);
+      loginUrl.searchParams.set("callbackUrl", pathname);
+      return NextResponse.redirect(loginUrl);
+    }
+    if (!isAdmin) {
+      return NextResponse.redirect(new URL("/dashboard", req.nextUrl.origin));
+    }
+  }
+
   if (isAuthPage && isLoggedIn) {
-    return NextResponse.redirect(new URL("/dashboard", req.nextUrl.origin));
+    const dest = isAdmin ? "/admin" : "/dashboard";
+    return NextResponse.redirect(new URL(dest, req.nextUrl.origin));
   }
 
   return NextResponse.next();
 });
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/login", "/signup"],
+  matcher: ["/dashboard/:path*", "/admin/:path*", "/login", "/signup"],
 };

@@ -17,9 +17,9 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
-  title: "QuickLegal — Documents juridiques rédigés par un avocat d'affaires",
+  title: "QuickLegal — Documents juridiques rédigés par des juristes, revus par un avocat au Barreau de Paris",
   description:
-    "Statuts de SAS, SCI, CGV e-commerce, NDA. Modèles juridiques rédigés et vérifiés par un avocat d'affaires inscrit au Barreau. Générez vos documents en 10 minutes.",
+    "Statuts de SAS, SCI, CGV e-commerce, NDA. Modèles juridiques rédigés par des juristes et revus par un avocat d'affaires inscrit au Barreau de Paris. Générez vos documents en 10 minutes.",
 };
 
 export default function RootLayout({

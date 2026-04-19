@@ -10,7 +10,7 @@ const steps = [
   {
     num: "02",
     title: "Votre document est généré",
-    desc: "Notre moteur intègre vos réponses dans un modèle rédigé et vérifié par un avocat d'affaires.",
+    desc: "Notre moteur intègre vos réponses dans un modèle rédigé par des juristes et revu par un avocat d'affaires inscrit au Barreau de Paris.",
   },
   {
     num: "03",
@@ -60,8 +60,8 @@ const documents = [
 
 const guarantees = [
   {
-    title: "Rédigé par un avocat d'affaires",
-    desc: "Chaque modèle est rédigé et vérifié par un avocat d'affaires inscrit au Barreau.",
+    title: "Rédigés par des juristes",
+    desc: "Chaque modèle est rédigé par des juristes et revu par un avocat d'affaires inscrit au Barreau de Paris.",
   },
   {
     title: "Prêt en moins de 10 minutes",
@@ -136,7 +136,7 @@ export default async function HomePage() {
             <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
               <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
             </svg>
-            Rédigé et vérifié par un avocat d'affaires inscrit au Barreau
+            Rédigés par des juristes, revus par un avocat au Barreau de Paris
           </div>
 
           <h1 className="font-serif text-5xl sm:text-7xl font-bold tracking-tight mb-8 leading-[1.05] text-slate-900">
@@ -146,9 +146,9 @@ export default async function HomePage() {
           </h1>
 
           <p className="text-lg sm:text-xl text-slate-600 max-w-2xl mx-auto mb-10 leading-relaxed">
-            Statuts de SAS, SCI, CGV e-commerce, NDA. Des documents rédigés par un
-            avocat d'affaires, conformes au RGPD, à un prix dix fois inférieur à celui
-            d'un cabinet.
+            Statuts de SAS, SCI, CGV e-commerce, NDA. Des documents rédigés par des
+            juristes, revus par un avocat d'affaires inscrit au Barreau de Paris,
+            conformes au RGPD, à un prix dix fois inférieur à celui d'un cabinet.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -200,8 +200,9 @@ export default async function HomePage() {
               Des documents prêts à signer
             </h2>
             <p className="text-slate-600 max-w-2xl mx-auto text-lg">
-              Chaque document est généré à partir d'un modèle rédigé et vérifié par un avocat d'affaires,
-              personnalisé avec vos réponses.
+              Chaque document est généré à partir d'un modèle rédigé par des juristes
+              et revu par un avocat d'affaires inscrit au Barreau de Paris, personnalisé
+              avec vos réponses.
             </p>
           </div>
 
@@ -292,10 +293,11 @@ export default async function HomePage() {
               Une exigence juridique de cabinet d'affaires
             </h2>
             <p className="text-lg text-blue-50 max-w-2xl mx-auto leading-relaxed">
-              Tous les modèles proposés sur QuickLegal sont rédigés et vérifiés par un avocat
-              d'affaires inscrit au Barreau, spécialisé en droit des sociétés et droit commercial.
-              Chaque document est régulièrement mis à jour pour refléter les évolutions
-              législatives et jurisprudentielles.
+              Tous les modèles proposés sur QuickLegal sont rédigés par des juristes
+              spécialisés et revus par un avocat d'affaires inscrit au Barreau de Paris,
+              expert en droit des sociétés et droit commercial. Chaque document est
+              régulièrement mis à jour pour refléter les évolutions législatives et
+              jurisprudentielles.
             </p>
           </div>
         </div>
@@ -329,7 +331,8 @@ export default async function HomePage() {
                 Quick<span className="text-blue-500">Legal</span>
               </span>
               <p className="text-slate-500 text-sm mt-1 max-w-md">
-                Documents juridiques en ligne, rédigés par un avocat d'affaires.
+                Documents juridiques rédigés par des juristes, revus par un avocat
+                d'affaires inscrit au Barreau de Paris.
               </p>
             </div>
             <div className="text-slate-400 text-xs">

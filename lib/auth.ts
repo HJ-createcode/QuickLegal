@@ -30,7 +30,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             id: user.id,
             email: user.email,
             name: user.name || undefined,
-          };
+            isAdmin: Boolean(
+              (user as unknown as { is_admin?: boolean }).is_admin
+            ),
+          } as unknown as { id: string; email: string; name?: string };
         } catch (e) {
           console.error("Auth error:", e);
           return null;
@@ -41,13 +44,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
+        const u = user as unknown as { id: string; isAdmin?: boolean };
+        token.id = u.id;
+        token.isAdmin = !!u.isAdmin;
       }
       return token;
     },
     async session({ session, token }) {
-      if (session.user && token.id) {
-        (session.user as { id?: string }).id = token.id as string;
+      if (session.user) {
+        const su = session.user as unknown as {
+          id?: string;
+          isAdmin?: boolean;
+        };
+        if (token.id) su.id = token.id as string;
+        su.isAdmin = !!(token as unknown as { isAdmin?: boolean }).isAdmin;
       }
       return session;
     },
