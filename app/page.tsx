@@ -1,5 +1,25 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { auth } from "@/lib/auth";
+import { SiteFooter } from "@/components/SiteFooter";
+import { JsonLd } from "@/components/JsonLd";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site-url";
+
+export const metadata: Metadata = {
+  // The template in the root layout adds "| QuickLegal" automatically, but
+  // the home page is the one exception where we want the full marketing
+  // title standalone.
+  title: {
+    absolute: `${SITE_NAME} — Documents juridiques rédigés par des juristes, revus par un avocat au Barreau de Paris`,
+  },
+  description: SITE_DESCRIPTION,
+  alternates: { canonical: "/" },
+  openGraph: {
+    url: SITE_URL,
+    title: `${SITE_NAME} — Documents juridiques en 10 minutes`,
+    description: SITE_DESCRIPTION,
+  },
+};
 
 const guarantees = [
   {
@@ -197,25 +217,22 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="border-t border-slate-200 py-12 px-6 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-            <div>
-              <span className="font-serif text-2xl font-bold text-slate-900">
-                Quick<span className="text-blue-500">Legal</span>
-              </span>
-              <p className="text-slate-500 text-sm mt-1 max-w-md">
-                Documents juridiques rédigés par des juristes, revus par un avocat
-                d'affaires inscrit au Barreau de Paris.
-              </p>
-            </div>
-            <div className="text-slate-400 text-xs">
-              © 2026 QuickLegal. Tous droits réservés.
-            </div>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
+
+      {/* Structured data : WebSite avec SearchAction désactivée (pas de
+          moteur de recherche interne) + Organization est émis par le root
+          layout donc inutile de le dupliquer ici. */}
+      <JsonLd
+        id="ld-website"
+        data={{
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: SITE_NAME,
+          url: SITE_URL,
+          inLanguage: "fr-FR",
+          description: SITE_DESCRIPTION,
+        }}
+      />
     </main>
   );
 }

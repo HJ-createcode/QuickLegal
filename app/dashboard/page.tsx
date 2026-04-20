@@ -1,9 +1,16 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { auth, signOut } from "@/lib/auth";
 import { listUserDocuments } from "@/lib/db";
 import type { DocumentRow } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
+
+// Authenticated-only page. Never useful in search results.
+export const metadata: Metadata = {
+  title: "Mon espace",
+  robots: { index: false, follow: false },
+};
 
 const TYPE_LABELS: Record<string, string> = {
   "statuts-sas": "Statuts de SAS",

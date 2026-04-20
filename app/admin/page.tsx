@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth, signOut } from "@/lib/auth";
@@ -11,6 +12,13 @@ import {
 } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
+
+// Admin-only. Middleware redirects non-admins; we also block indexation as
+// defence in depth.
+export const metadata: Metadata = {
+  title: "Administration",
+  robots: { index: false, follow: false },
+};
 
 const TYPE_LABELS: Record<string, string> = {
   "statuts-sas": "Statuts SAS",

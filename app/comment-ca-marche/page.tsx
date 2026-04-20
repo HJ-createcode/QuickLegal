@@ -1,5 +1,22 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { auth } from "@/lib/auth";
+import { SiteFooter } from "@/components/SiteFooter";
+import { JsonLd } from "@/components/JsonLd";
+import { SITE_URL } from "@/lib/site-url";
+
+export const metadata: Metadata = {
+  title: "Comment ça marche",
+  description:
+    "Trois étapes pour générer un document juridique avec QuickLegal : remplissez le questionnaire guidé, payez en ligne, téléchargez votre PDF. Vos documents restent accessibles à vie dans votre espace.",
+  alternates: { canonical: "/comment-ca-marche" },
+  openGraph: {
+    url: `${SITE_URL}/comment-ca-marche`,
+    title: "Comment ça marche | QuickLegal",
+    description:
+      "Trois étapes, zéro friction. De la première question au PDF signé, en moins de dix minutes.",
+  },
+};
 
 const steps = [
   {
@@ -166,25 +183,30 @@ export default async function CommentCaMarchePage() {
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="border-t border-slate-200 py-12 px-6 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-            <div>
-              <span className="font-serif text-2xl font-bold text-slate-900">
-                Quick<span className="text-blue-500">Legal</span>
-              </span>
-              <p className="text-slate-500 text-sm mt-1 max-w-md">
-                Documents juridiques rédigés par des juristes, revus par un avocat
-                d'affaires inscrit au Barreau de Paris.
-              </p>
-            </div>
-            <div className="text-slate-400 text-xs">
-              © 2026 QuickLegal. Tous droits réservés.
-            </div>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
+
+      {/* Breadcrumbs pour l'URL /comment-ca-marche */}
+      <JsonLd
+        id="ld-breadcrumb"
+        data={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            {
+              "@type": "ListItem",
+              position: 1,
+              name: "Accueil",
+              item: `${SITE_URL}/`,
+            },
+            {
+              "@type": "ListItem",
+              position: 2,
+              name: "Comment ça marche",
+              item: `${SITE_URL}/comment-ca-marche`,
+            },
+          ],
+        }}
+      />
     </main>
   );
 }

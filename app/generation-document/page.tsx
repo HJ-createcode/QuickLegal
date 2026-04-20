@@ -1,11 +1,29 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { auth } from "@/lib/auth";
+import { SiteFooter } from "@/components/SiteFooter";
+import { JsonLd } from "@/components/JsonLd";
+import { SITE_URL } from "@/lib/site-url";
 import {
   CATEGORY_LABELS,
   listByCategory,
+  listDocuments,
   type DocumentCategory,
   type DocumentDefinition,
 } from "@/lib/document-registry";
+
+export const metadata: Metadata = {
+  title: "Génération de document",
+  description:
+    "Catalogue QuickLegal : statuts de société, PV d'assemblée, mentions légales, CGU, CGV e-commerce, NDA et plus. Chaque modèle est rédigé par des juristes et revu par un avocat au Barreau de Paris.",
+  alternates: { canonical: "/generation-document" },
+  openGraph: {
+    url: `${SITE_URL}/generation-document`,
+    title: "Catalogue des documents juridiques | QuickLegal",
+    description:
+      "Statuts, gouvernance, contrats commerciaux, conformité web : tous nos modèles à prix fixe.",
+  },
+};
 
 const CATEGORY_ORDER: DocumentCategory[] = [
   "statuts",
@@ -109,25 +127,49 @@ export default async function GenerationDocumentPage() {
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="border-t border-slate-200 py-12 px-6 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-            <div>
-              <span className="font-serif text-2xl font-bold text-slate-900">
-                Quick<span className="text-blue-500">Legal</span>
-              </span>
-              <p className="text-slate-500 text-sm mt-1 max-w-md">
-                Documents juridiques rédigés par des juristes, revus par un
-                avocat d'affaires inscrit au Barreau de Paris.
-              </p>
-            </div>
-            <div className="text-slate-400 text-xs">
-              © 2026 QuickLegal. Tous droits réservés.
-            </div>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
+
+      {/* Breadcrumbs pour /generation-document */}
+      <JsonLd
+        id="ld-breadcrumb"
+        data={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            {
+              "@type": "ListItem",
+              position: 1,
+              name: "Accueil",
+              item: `${SITE_URL}/`,
+            },
+            {
+              "@type": "ListItem",
+              position: 2,
+              name: "Génération de document",
+              item: `${SITE_URL}/generation-document`,
+            },
+          ],
+        }}
+      />
+
+      {/* CollectionPage pour signaler que la page liste notre catalogue.
+          Hub pour les 13 URLs produit sans aller jusqu'au schema Product
+          par item (réservé à la phase d'enrichissement rédactionnel). */}
+      <JsonLd
+        id="ld-collection"
+        data={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: "Catalogue des documents juridiques QuickLegal",
+          url: `${SITE_URL}/generation-document`,
+          inLanguage: "fr-FR",
+          hasPart: listDocuments().map((d) => ({
+            "@type": "WebPage",
+            name: d.label,
+            url: `${SITE_URL}/documents/${d.type}`,
+          })),
+        }}
+      />
     </main>
   );
 }
