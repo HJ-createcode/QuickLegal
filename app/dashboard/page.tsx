@@ -87,7 +87,7 @@ export default async function DashboardPage() {
             </p>
           </div>
           <Link
-            href="/#documents"
+            href="/generation-document"
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-semibold text-sm shadow-md"
           >
             + Nouveau document
@@ -114,7 +114,7 @@ export default async function DashboardPage() {
               Lancez votre premier questionnaire pour générer un document juridique.
             </p>
             <Link
-              href="/#documents"
+              href="/generation-document"
               className="inline-block px-6 py-3 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-semibold text-sm shadow-md"
             >
               Voir nos documents

@@ -1,45 +1,6 @@
 import Link from "next/link";
 import { auth } from "@/lib/auth";
 
-const documents = [
-  {
-    title: "Statuts de SAS",
-    price: "79",
-    originalPrice: "1 500",
-    desc: "Statuts complets avec clauses d'agrément, répartition du capital, nomination du président.",
-    href: "/documents/statuts-sas",
-    available: true,
-    features: ["~25 articles", "Clauses agrément & préemption", "Conforme RGPD"],
-  },
-  {
-    title: "Statuts de SCI",
-    price: "89",
-    originalPrice: "1 800",
-    desc: "Société civile immobilière avec gérance, parts sociales et régime fiscal au choix.",
-    href: "/documents/statuts-sci",
-    available: true,
-    features: ["~20 articles", "IR ou IS au choix", "Conforme RGPD"],
-  },
-  {
-    title: "CGV E-commerce",
-    price: "49",
-    originalPrice: "900",
-    desc: "Conditions générales de vente conformes au Code de la consommation et au RGPD.",
-    href: "/documents/cgv-ecommerce",
-    available: true,
-    features: ["Droit de rétractation", "Article RGPD complet", "Médiateur consommation"],
-  },
-  {
-    title: "Accord de confidentialité (NDA)",
-    price: "39",
-    originalPrice: "500",
-    desc: "Accord de confidentialité unilatéral ou réciproque, adapté à votre contexte.",
-    href: "/documents/nda",
-    available: true,
-    features: ["Unilatéral ou réciproque", "Durée personnalisable", "Conforme RGPD"],
-  },
-];
-
 const guarantees = [
   {
     title: "Rédigés par des juristes",
@@ -75,9 +36,9 @@ export default async function HomePage() {
             </span>
           </Link>
           <div className="hidden md:flex items-center gap-8 text-sm">
-            <a href="#documents" className="text-slate-600 hover:text-slate-900">
-              Documents
-            </a>
+            <Link href="/generation-document" className="text-slate-600 hover:text-slate-900">
+              Génération de document
+            </Link>
             <Link href="/comment-ca-marche" className="text-slate-600 hover:text-slate-900">
               Comment ça marche
             </Link>
@@ -137,10 +98,10 @@ export default async function HomePage() {
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
-              href="#documents"
+              href="/generation-document"
               className="px-8 py-3.5 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-semibold text-base shadow-lg shadow-blue-500/20"
             >
-              Découvrir nos documents
+              Génération de document
             </Link>
             <Link
               href="/comment-ca-marche"
@@ -173,80 +134,23 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* DOCUMENTS */}
-      <section id="documents" className="py-24 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-blue-500 text-sm font-semibold uppercase tracking-widest mb-3">
-              Notre catalogue
-            </p>
-            <h2 className="font-serif text-4xl sm:text-5xl font-bold mb-4 text-slate-900">
-              Des documents prêts à signer
-            </h2>
-            <p className="text-slate-600 max-w-2xl mx-auto text-lg">
-              Chaque document est généré à partir d'un modèle rédigé par des juristes
-              et revu par un avocat d'affaires inscrit au Barreau de Paris, personnalisé
-              avec vos réponses.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            {documents.map((doc) => (
-              <div
-                key={doc.title}
-                className="group relative rounded-2xl bg-white border border-slate-200 p-8 shadow-premium shadow-premium-hover transition-all hover:-translate-y-0.5"
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <h3 className="font-serif text-2xl font-bold text-slate-900 mb-1">
-                      {doc.title}
-                    </h3>
-                    <p className="text-slate-600 text-sm">{doc.desc}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-baseline gap-2 mb-6">
-                  <span className="text-4xl font-bold text-slate-900 font-serif">
-                    {doc.price}
-                  </span>
-                  <span className="text-slate-500 text-sm">€ TTC</span>
-                  <span className="text-slate-400 text-xs line-through ml-2">
-                    ≈ {doc.originalPrice} € en cabinet
-                  </span>
-                </div>
-
-                <ul className="space-y-2 mb-8">
-                  {doc.features.map((f) => (
-                    <li key={f} className="flex items-center gap-2 text-sm text-slate-600">
-                      <svg className="w-4 h-4 text-blue-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                      </svg>
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-
-                <Link
-                  href={doc.href}
-                  className="block text-center w-full px-6 py-3 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-semibold text-sm shadow-md"
-                >
-                  Générer ce document
-                </Link>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* HOW IT WORKS — LINK */}
+      {/* ACTION LINKS */}
       <section className="py-20 px-6 bg-gradient-to-b from-white via-sky-50/50 to-white">
-        <div className="max-w-3xl mx-auto text-center">
-          <Link
-            href="/comment-ca-marche"
-            className="inline-block px-8 py-3.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-white text-slate-900 font-medium text-base shadow-sm"
-          >
-            Comment ça marche
-          </Link>
+        <div className="max-w-3xl mx-auto">
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Link
+              href="/comment-ca-marche"
+              className="inline-block px-8 py-3.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-white text-slate-900 font-medium text-base shadow-sm text-center"
+            >
+              Comment ça marche
+            </Link>
+            <Link
+              href="/generation-document"
+              className="inline-block px-8 py-3.5 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-semibold text-base shadow-lg shadow-blue-500/20 text-center"
+            >
+              Génération de document
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -285,10 +189,10 @@ export default async function HomePage() {
             téléchargement immédiat.
           </p>
           <Link
-            href="#documents"
+            href="/generation-document"
             className="inline-block px-10 py-4 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-semibold text-lg shadow-xl shadow-blue-500/25"
           >
-            Voir nos documents
+            Générer un document
           </Link>
         </div>
       </section>

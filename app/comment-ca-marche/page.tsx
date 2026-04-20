@@ -35,8 +35,8 @@ export default async function CommentCaMarchePage() {
             </span>
           </Link>
           <div className="hidden md:flex items-center gap-8 text-sm">
-            <Link href="/#documents" className="text-slate-600 hover:text-slate-900">
-              Documents
+            <Link href="/generation-document" className="text-slate-600 hover:text-slate-900">
+              Génération de document
             </Link>
             <Link href="/comment-ca-marche" className="text-slate-900 font-medium">
               Comment ça marche
@@ -158,10 +158,10 @@ export default async function CommentCaMarchePage() {
             Choisissez votre document et générez-le en quelques minutes.
           </p>
           <Link
-            href="/#documents"
+            href="/generation-document"
             className="inline-block px-10 py-4 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-semibold text-lg shadow-xl shadow-blue-500/25"
           >
-            Voir nos documents
+            Générer un document
           </Link>
         </div>
       </section>

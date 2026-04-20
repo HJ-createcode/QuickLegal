@@ -107,12 +107,12 @@ export default function SignupPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={10}
-                maxLength={72}
-                placeholder="10 à 72 caractères, 1 lettre, 1 chiffre"
+                maxLength={30}
+                placeholder="10 à 30 car., 1 lettre, 1 chiffre, 1 symbole"
                 className="w-full px-3 py-2.5 rounded-lg bg-white border border-slate-200 text-slate-900 placeholder-slate-400"
               />
               <p className="text-xs text-slate-500 mt-1.5">
-                Entre 10 et 72 caractères, avec au moins une lettre et un chiffre.
+                Entre 10 et 30 caractères, avec au moins une lettre, un chiffre et un symbole (ex. ! @ # $).
               </p>
             </div>
 
