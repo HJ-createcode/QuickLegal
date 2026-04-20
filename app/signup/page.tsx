@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
+import { SiteNavClient } from "@/components/SiteNavClient";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -57,15 +58,11 @@ export default function SignupPage() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center px-4 py-12 bg-gradient-to-b from-sky-50/60 via-white to-white">
-      <div className="max-w-md w-full">
-        <Link href="/" className="block text-center mb-8">
-          <span className="font-serif text-3xl font-bold text-slate-900">
-            Quick<span className="text-blue-500">Legal</span>
-          </span>
-        </Link>
-
-        <div className="bg-white rounded-2xl shadow-premium border border-slate-200 p-8">
+    <main className="min-h-screen bg-gradient-to-b from-sky-50/60 via-white to-white">
+      <SiteNavClient variant="solid" current="/signup" />
+      <div className="flex items-center justify-center px-4 py-12 min-h-[calc(100vh-4rem)]">
+        <div className="max-w-md w-full">
+          <div className="bg-white rounded-2xl shadow-premium border border-slate-200 p-8">
           <h1 className="font-serif text-2xl font-bold text-slate-900 mb-2">Créer un compte</h1>
           <p className="text-slate-600 text-sm mb-6">
             Accédez à votre espace personnel et retrouvez vos documents générés.
@@ -137,6 +134,7 @@ export default function SignupPage() {
               Connectez-vous
             </Link>
           </p>
+          </div>
         </div>
       </div>
     </main>
