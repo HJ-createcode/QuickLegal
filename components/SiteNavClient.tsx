@@ -44,9 +44,12 @@ export function SiteNavClient({ variant = "transparent", current }: SiteNavClien
             Quick<span className="text-blue-500">Legal</span>
           </span>
         </Link>
-        <div className="hidden md:flex items-center gap-8 text-sm">
+        <div className="hidden md:flex items-center gap-7 text-sm">
           <Link href="/generation-document" className={linkClass("/generation-document")}>
-            Génération de document
+            Catalogue
+          </Link>
+          <Link href="/guides" className={linkClass("/guides")}>
+            Guides
           </Link>
           <Link href="/comment-ca-marche" className={linkClass("/comment-ca-marche")}>
             Comment ça marche

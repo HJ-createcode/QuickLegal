@@ -14,6 +14,7 @@ const CATEGORY_ORDER: DocumentCategory[] = [
 ];
 
 const INFO_LINKS = [
+  { href: "/guides", label: "Guides" },
   { href: "/comment-ca-marche", label: "Comment ça marche" },
   { href: "/notre-methode", label: "Notre méthode" },
   { href: "/comment-nous-redigeons", label: "Comment nous rédigeons" },

@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site-url";
 import { listDocuments } from "@/lib/document-registry";
+import { GUIDES } from "@/lib/guides-registry";
 
 /**
  * XML sitemap.
@@ -53,7 +54,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.6,
     },
+    {
+      url: `${SITE_URL}/guides`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
   ];
+
+  const guides: MetadataRoute.Sitemap = GUIDES.map((g) => ({
+    url: `${SITE_URL}/guides/${g.slug}`,
+    lastModified: now,
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }));
 
   const legal: MetadataRoute.Sitemap = [
     {
@@ -104,5 +118,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  return [...marketing, ...products, ...legal, ...auth];
+  return [...marketing, ...guides, ...products, ...legal, ...auth];
 }
