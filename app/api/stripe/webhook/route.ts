@@ -5,8 +5,9 @@ import {
   markDocumentPaid,
   type DocumentRow,
 } from "@/lib/db";
-import { generatePDF, type DocumentType } from "@/lib/pdf-generator";
+import { generatePDF } from "@/lib/pdf-generator";
 import { uploadPDF } from "@/lib/blob";
+import { isValidDocumentType } from "@/lib/document-registry";
 
 /**
  * Stripe webhook handler.
@@ -34,13 +35,6 @@ import { uploadPDF } from "@/lib/blob";
 // default JSON parser and read the raw text.
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-
-const VALID_TYPES: DocumentType[] = [
-  "statuts-sas",
-  "statuts-sci",
-  "cgv-ecommerce",
-  "nda",
-];
 
 function sanitizeSlug(s: string): string {
   return s.slice(0, 60).replace(/[^a-zA-Z0-9]/g, "_") || "document";
@@ -109,7 +103,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: true, skipped: "missing metadata" });
   }
 
-  if (!VALID_TYPES.includes(documentType as DocumentType)) {
+  if (!isValidDocumentType(documentType)) {
     return NextResponse.json({ ok: true, skipped: "invalid type" });
   }
 

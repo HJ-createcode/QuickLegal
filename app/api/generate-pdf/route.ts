@@ -1,38 +1,47 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { generatePDF, type DocumentType } from "@/lib/pdf-generator";
+import { generatePDF } from "@/lib/pdf-generator";
+import { getDocumentDef, isValidDocumentType } from "@/lib/document-registry";
 
-const VALID_TYPES: DocumentType[] = [
-  "statuts-sas",
-  "statuts-sci",
-  "cgv-ecommerce",
-  "nda",
-];
-
-// Hard limit on text field length to prevent DoS / buffer abuse.
+// Hard limits on field/array sizes to prevent DoS / buffer abuse. These apply
+// to ANY document type: we cap the raw JSON body and a handful of known text
+// fields that are large enough to be tempting as abuse vectors.
 const MAX_TEXT_LEN = 5000;
 const MAX_SHORT_LEN = 500;
 const MAX_ASSOCIES = 50;
-// Total JSON size cap. Individual text fields are also capped below, but a
-// single top-level cap defends against a payload that stuffs unknown or
-// unchecked fields with MB of data.
 const MAX_BODY_BYTES = 50_000;
 
-function tooLong(value: unknown, limit: number): boolean {
-  return typeof value === "string" && value.length > limit;
-}
+const LONG_TEXT_FIELDS = [
+  "objet_social",
+  "contexte",
+  "nature_informations",
+  "description_activite",
+];
+const SHORT_TEXT_FIELDS = [
+  "denomination",
+  "siege_social",
+  "type_produits",
+  "partie_a_nom",
+  "partie_b_nom",
+];
 
-function validateInputLengths(data: Record<string, unknown>): string | null {
-  if (tooLong(data.denomination, MAX_SHORT_LEN)) return "Dénomination trop longue.";
-  if (tooLong(data.objet_social, MAX_TEXT_LEN)) return "Objet social trop long.";
-  if (tooLong(data.siege_social, MAX_SHORT_LEN)) return "Siège social trop long.";
-  if (tooLong(data.contexte, MAX_TEXT_LEN)) return "Contexte trop long.";
-  if (tooLong(data.nature_informations, MAX_TEXT_LEN))
-    return "Champ « nature des informations » trop long.";
-  if (tooLong(data.type_produits, MAX_SHORT_LEN)) return "Champ « type de produits » trop long.";
-  if (tooLong(data.partie_a_nom, MAX_SHORT_LEN)) return "Nom partie A trop long.";
-  if (tooLong(data.partie_b_nom, MAX_SHORT_LEN)) return "Nom partie B trop long.";
-  if (Array.isArray(data.associes_list) && data.associes_list.length > MAX_ASSOCIES) {
+function enforceLimits(data: Record<string, unknown>): string | null {
+  for (const k of SHORT_TEXT_FIELDS) {
+    const v = data[k];
+    if (typeof v === "string" && v.length > MAX_SHORT_LEN) {
+      return `Champ "${k}" trop long.`;
+    }
+  }
+  for (const k of LONG_TEXT_FIELDS) {
+    const v = data[k];
+    if (typeof v === "string" && v.length > MAX_TEXT_LEN) {
+      return `Champ "${k}" trop long.`;
+    }
+  }
+  if (
+    Array.isArray(data.associes_list) &&
+    data.associes_list.length > MAX_ASSOCIES
+  ) {
     return `Nombre maximum d'associés dépassé (${MAX_ASSOCIES}).`;
   }
   return null;
@@ -59,72 +68,43 @@ export async function POST(request: NextRequest) {
     }
     const body = JSON.parse(rawBody);
 
-    let type: DocumentType;
+    let type: string;
     let data: Record<string, unknown>;
 
     if (body.type && body.data) {
-      type = body.type;
-      data = body.data;
+      type = String(body.type);
+      data = body.data as Record<string, unknown>;
     } else {
       type = "statuts-sas";
-      data = body;
+      data = body as Record<string, unknown>;
     }
 
-    if (!VALID_TYPES.includes(type)) {
+    if (!isValidDocumentType(type)) {
       return NextResponse.json(
         { error: "Type de document inconnu." },
         { status: 400 }
       );
     }
 
-    // --- Length validation (DoS prevention) ---
-    const lengthError = validateInputLengths(data);
-    if (lengthError) {
-      return NextResponse.json({ error: lengthError }, { status: 400 });
+    const def = getDocumentDef(type)!;
+
+    const limitsError = enforceLimits(data);
+    if (limitsError) {
+      return NextResponse.json({ error: limitsError }, { status: 400 });
     }
 
-    // --- Per-document-type validation ---
-    if (type === "statuts-sas" || type === "statuts-sci") {
-      if (!data.denomination || !data.objet_social || !data.siege_social) {
-        return NextResponse.json(
-          {
-            error: "Données incomplètes. Veuillez remplir tous les champs obligatoires.",
-          },
-          { status: 400 }
-        );
-      }
-      const associes = data.associes_list as unknown[];
-      if (!associes || associes.length === 0) {
-        return NextResponse.json(
-          { error: "Au moins un associé est requis." },
-          { status: 400 }
-        );
-      }
-    }
-
-    if (type === "cgv-ecommerce") {
-      if (!data.denomination || !data.siret || !data.siege_social) {
-        return NextResponse.json(
-          { error: "Informations du vendeur incomplètes." },
-          { status: 400 }
-        );
-      }
-    }
-
-    if (type === "nda") {
-      if (!data.partie_a_nom || !data.partie_b_nom || !data.contexte) {
-        return NextResponse.json(
-          { error: "Informations des parties ou du contexte incomplètes." },
-          { status: 400 }
-        );
-      }
+    const docError = def.validate(data);
+    if (docError) {
+      return NextResponse.json({ error: docError }, { status: 400 });
     }
 
     const pdfBuffer = generatePDF(type, data);
     const uint8 = new Uint8Array(pdfBuffer);
 
-    const filenameBase = (data.denomination || data.partie_a_nom || type) as string;
-    const safeName = filenameBase.slice(0, 60).replace(/[^a-zA-Z0-9]/g, "_");
+    const safeName = def
+      .extractTitle(data)
+      .slice(0, 60)
+      .replace(/[^a-zA-Z0-9]/g, "_") || "document";
 
     return new NextResponse(uint8, {
       status: 200,
@@ -134,7 +114,6 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch {
-    // Do not leak internal error details
     return NextResponse.json(
       { error: "Erreur lors de la génération du PDF." },
       { status: 500 }

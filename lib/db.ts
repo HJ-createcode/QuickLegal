@@ -27,7 +27,12 @@ export interface UserRow {
 export interface DocumentRow {
   id: string;
   user_id: string;
-  type: "statuts-sas" | "statuts-sci" | "cgv-ecommerce" | "nda";
+  /**
+   * Document slug. The set of valid values is defined by DOCUMENT_REGISTRY in
+   * `lib/document-registry.ts` — validated at every API entry point. Left as
+   * a plain string here so new types can be added without widening a union.
+   */
+  type: string;
   title: string;
   form_data: Record<string, unknown>;
   pdf_url: string | null;

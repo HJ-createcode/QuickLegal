@@ -5,18 +5,14 @@ import {
   listUserDocuments,
   countUnpaidDrafts,
   MAX_UNPAID_DRAFTS_PER_USER,
+  type DocumentRow,
 } from "@/lib/db";
+import { isValidDocumentType } from "@/lib/document-registry";
 
 const MAX_TITLE_LEN = 200;
 // form_data is stored verbatim as JSONB; cap it to prevent a single user
 // from bloating the table with multi-MB blobs.
 const MAX_FORM_DATA_BYTES = 50_000;
-const VALID_TYPES = new Set([
-  "statuts-sas",
-  "statuts-sci",
-  "cgv-ecommerce",
-  "nda",
-]);
 
 export async function GET() {
   const session = await auth().catch(() => null);
@@ -49,7 +45,7 @@ export async function POST(request: NextRequest) {
   try {
     const { type, title, formData } = await request.json();
 
-    if (!VALID_TYPES.has(type)) {
+    if (!isValidDocumentType(type)) {
       return NextResponse.json(
         { error: "Type de document inconnu." },
         { status: 400 }
@@ -83,7 +79,7 @@ export async function POST(request: NextRequest) {
     // Any incoming `paid` or `pdfUrl` in the body is silently ignored.
     const doc = await createDocument(
       userId,
-      type,
+      type as DocumentRow["type"],
       safeTitle,
       formData || {},
       null, // pdf_url — set by webhook

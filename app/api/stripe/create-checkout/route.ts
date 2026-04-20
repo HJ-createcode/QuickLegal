@@ -6,13 +6,7 @@ import {
   MAX_UNPAID_DRAFTS_PER_USER,
   type DocumentRow,
 } from "@/lib/db";
-
-const PRICES: Record<string, { amount: number; label: string }> = {
-  "statuts-sas": { amount: 7900, label: "Statuts de SAS" },
-  "statuts-sci": { amount: 8900, label: "Statuts de SCI" },
-  "cgv-ecommerce": { amount: 4900, label: "CGV E-commerce" },
-  nda: { amount: 3900, label: "Accord de confidentialité (NDA)" },
-};
+import { getDocumentDef, isValidDocumentType } from "@/lib/document-registry";
 
 const MAX_FORM_DATA_BYTES = 50_000;
 
@@ -43,19 +37,18 @@ export async function POST(request: NextRequest) {
   try {
     const { type, formData } = await request.json();
 
-    if (!type || !PRICES[type as string]) {
+    if (!isValidDocumentType(type)) {
       return NextResponse.json(
         { error: "Type de document inconnu." },
         { status: 400 }
       );
     }
+    const def = getDocumentDef(type)!;
 
-    const priceInfo = PRICES[type as string];
-    const rawTitle =
-      (formData?.denomination as string) ||
-      (formData?.partie_a_nom as string) ||
-      priceInfo.label;
-    const title = String(rawTitle).slice(0, 120);
+    const rawTitle = def.extractTitle(
+      (formData as Record<string, unknown>) || {}
+    );
+    const title = rawTitle.slice(0, 120);
 
     // Validate form_data size before persisting. Stored in JSONB so we cap it
     // to keep table growth bounded.
@@ -85,7 +78,7 @@ export async function POST(request: NextRequest) {
     try {
       draft = await createDocument(
         user.id,
-        type as DocumentRow["type"],
+        type,
         title,
         (formData as Record<string, unknown>) || {},
         null, // pdf_url — filled by the webhook after upload
@@ -103,7 +96,9 @@ export async function POST(request: NextRequest) {
 
     // Prefer a pinned app URL (defense in depth against spoofed Host headers
     // on non-Vercel deployments). Fall back to the request origin.
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") || request.nextUrl.origin;
+    const appUrl =
+      process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ||
+      request.nextUrl.origin;
 
     const checkoutSession = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
@@ -113,10 +108,10 @@ export async function POST(request: NextRequest) {
           price_data: {
             currency: "eur",
             product_data: {
-              name: `${priceInfo.label} — ${title}`,
+              name: `${def.label} — ${title}`,
               description: "Document juridique généré par QuickLegal",
             },
-            unit_amount: priceInfo.amount,
+            unit_amount: def.priceCents,
           },
           quantity: 1,
         },

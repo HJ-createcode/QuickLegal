@@ -15,7 +15,11 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS documents (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  type TEXT NOT NULL CHECK (type IN ('statuts-sas', 'statuts-sci', 'cgv-ecommerce', 'nda')),
+  -- Document type slug (e.g. 'statuts-sas'). Validated at the API layer
+  -- against DOCUMENT_REGISTRY in lib/document-registry.ts. Not enforced by
+  -- a CHECK constraint because the list grows often and migrations are
+  -- easier when the app is the source of truth.
+  type TEXT NOT NULL,
   title TEXT NOT NULL,
   form_data JSONB NOT NULL,
   pdf_url TEXT,
@@ -33,6 +37,19 @@ CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
 ALTER TABLE users ADD COLUMN IF NOT EXISTS is_admin BOOLEAN DEFAULT FALSE;
 ALTER TABLE documents ADD COLUMN IF NOT EXISTS price_cents INTEGER;
 ALTER TABLE documents ADD COLUMN IF NOT EXISTS stripe_session_id TEXT;
+
+-- Migration : drop l'ancien CHECK figé sur les 4 types initiaux. Le registry
+-- applicatif (lib/document-registry.ts) remplace cette validation et permet
+-- d'ajouter des types sans migration DB.
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM pg_constraint
+    WHERE conname = 'documents_type_check'
+  ) THEN
+    ALTER TABLE documents DROP CONSTRAINT documents_type_check;
+  END IF;
+END$$;
 
 -- ==============================================================
 -- BOOTSTRAP ADMIN
