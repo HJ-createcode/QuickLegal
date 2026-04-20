@@ -1,39 +1,30 @@
-"use client";
-
-import { use } from "react";
 import { notFound } from "next/navigation";
-import { Wizard } from "@/components/Wizard";
+import { ProductLandingPage } from "@/components/ProductLandingPage";
 import { getDocumentDef } from "@/lib/document-registry";
-import { getRecapComponent } from "@/components/recaps";
+import { getProductContent } from "@/lib/product-content";
 
 interface Props {
   params: Promise<{ type: string }>;
 }
 
-export default function DocumentPage({ params }: Props) {
-  const { type } = use(params);
-  const def = getDocumentDef(type);
+/**
+ * SEO landing page for a product.
+ *
+ * Server Component: no hydration JS, fully crawlable.
+ * Wizard lives at `/documents/[type]/commencer`.
+ */
+export default async function ProductPage({ params }: Props) {
+  const { type } = await params;
+  const doc = getDocumentDef(type);
+  if (!doc) notFound();
 
-  if (!def) {
+  const content = getProductContent(type);
+  if (!content) {
+    // Should never happen because every registered product has content,
+    // but this guard avoids rendering an empty shell if the two registries
+    // diverge during a refactor.
     notFound();
   }
 
-  const Recap = getRecapComponent(type);
-
-  return (
-    <Wizard
-      documentType={def.type}
-      documentLabel={def.label}
-      price={def.priceCents / 100}
-      steps={def.questionnaire}
-      storageKey={`quicklegal_${def.type.replace(/-/g, "_")}`}
-      initialData={def.initialData}
-      renderRecap={(data) => <Recap data={data} />}
-      shouldShowField={
-        def.shouldShowField
-          ? (field, data) => def.shouldShowField!(field.id, data)
-          : undefined
-      }
-    />
-  );
+  return <ProductLandingPage doc={doc} content={content} />;
 }

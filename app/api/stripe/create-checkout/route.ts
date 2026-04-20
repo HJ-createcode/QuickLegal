@@ -118,7 +118,7 @@ export async function POST(request: NextRequest) {
       ],
       mode: "payment",
       success_url: `${appUrl}/success?doc_id=${draft.id}&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${appUrl}/documents/${type}`,
+      cancel_url: `${appUrl}/documents/${type}/commencer`,
       metadata: {
         document_type: type,
         document_id: draft.id,

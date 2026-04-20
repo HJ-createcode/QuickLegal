@@ -174,7 +174,7 @@ export default async function DashboardPage() {
                       </a>
                     )}
                     <Link
-                      href={`/documents/${doc.type}`}
+                      href={`/documents/${doc.type}/commencer`}
                       className="px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 text-sm font-medium"
                     >
                       Rouvrir

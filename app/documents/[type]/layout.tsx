@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { JsonLd } from "@/components/JsonLd";
 import { getDocumentDef, listDocuments } from "@/lib/document-registry";
+import { getProductContent } from "@/lib/product-content";
 import { SITE_URL } from "@/lib/site-url";
 
 interface Props {
@@ -10,13 +10,14 @@ interface Props {
 }
 
 /**
- * Per-product metadata + structured data.
+ * Per-product metadata for the landing page at `/documents/<slug>`.
  *
- * The page component (page.tsx) is a Client Component because the Wizard
- * needs useState/useEffect. We keep this layout as a Server Component so
- * we can:
- *   - emit `export async function generateMetadata` per slug
- *   - inject BreadcrumbList JSON-LD pre-hydration (no layout shift)
+ * Child route `/documents/<slug>/commencer` overrides these defaults
+ * (noindex + canonical back to the landing).
+ *
+ * Structured data (Product, FAQPage, BreadcrumbList) is emitted inside
+ * `components/ProductLandingPage.tsx` so it only appears on the SEO
+ * page, not on the questionnaire subroute.
  */
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { type } = await params;
@@ -29,14 +30,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const price = Math.round(def.priceCents / 100);
-  const description = `${def.description} Prix fixe : ${price} € TTC. Rédigé par des juristes, revu par un avocat au Barreau de Paris. Généré en quelques minutes.`;
-  const canonical = `/documents/${def.type}`;
-  const absoluteUrl = `${SITE_URL}${canonical}`;
+  const content = getProductContent(type);
+  const description = content
+    ? `${content.promise} Prix fixe : ${price} € TTC.`
+    : `${def.description} Prix fixe : ${price} € TTC. Rédigé par des juristes, revu par un avocat au Barreau de Paris.`;
+
+  const canonicalPath = `/documents/${def.type}`;
+  const absoluteUrl = `${SITE_URL}${canonicalPath}`;
 
   return {
     title: def.label,
     description,
-    alternates: { canonical },
+    alternates: { canonical: canonicalPath },
     openGraph: {
       url: absoluteUrl,
       title: `${def.label} | QuickLegal`,
@@ -50,9 +55,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 /**
- * Pre-compute the list of slugs at build time so static metadata generation
- * can resolve synchronously. Dynamic routes work without this but we keep
- * a stable list in case we move to `dynamic = "force-static"` later.
+ * Pre-render every product landing page as static HTML. 13 pages, built
+ * at deploy time — Googlebot sees a full HTML response with zero SSR
+ * overhead.
  */
 export function generateStaticParams() {
   return listDocuments().map((d) => ({ type: d.type }));
@@ -60,43 +65,6 @@ export function generateStaticParams() {
 
 export default async function DocumentLayout({ children, params }: Props) {
   const { type } = await params;
-  const def = getDocumentDef(type);
-  if (!def) notFound();
-
-  const canonical = `${SITE_URL}/documents/${def.type}`;
-
-  return (
-    <>
-      {children}
-
-      {/* Breadcrumb : Accueil > Génération > Document */}
-      <JsonLd
-        id="ld-breadcrumb"
-        data={{
-          "@context": "https://schema.org",
-          "@type": "BreadcrumbList",
-          itemListElement: [
-            {
-              "@type": "ListItem",
-              position: 1,
-              name: "Accueil",
-              item: `${SITE_URL}/`,
-            },
-            {
-              "@type": "ListItem",
-              position: 2,
-              name: "Génération de document",
-              item: `${SITE_URL}/generation-document`,
-            },
-            {
-              "@type": "ListItem",
-              position: 3,
-              name: def.label,
-              item: canonical,
-            },
-          ],
-        }}
-      />
-    </>
-  );
+  if (!getDocumentDef(type)) notFound();
+  return <>{children}</>;
 }
