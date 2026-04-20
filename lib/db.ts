@@ -95,8 +95,13 @@ export const MAX_UNPAID_DRAFTS_PER_USER = 50;
 
 export async function listUserDocuments(userId: string): Promise<DocumentRow[]> {
   const sql = getSql();
+  // Exclude form_data: the dashboard only needs metadata, not the full answers.
+  // Keeps payloads small and avoids unnecessary flow of PII through the tier.
   const rows = (await sql`
-    SELECT * FROM documents
+    SELECT
+      id, user_id, type, title, pdf_url, paid,
+      price_cents, stripe_session_id, created_at
+    FROM documents
     WHERE user_id = ${userId}
     ORDER BY created_at DESC
     LIMIT ${USER_DOCUMENTS_LIMIT}
@@ -219,11 +224,20 @@ export async function finalizeDocumentPayment(
 }
 
 // ===== Admin queries =====
+// Defense in depth: select only the columns the admin UI actually needs.
+// Never SELECT * on `users` (pulls password_hash) or on `documents` (pulls
+// form_data containing PII). Even though server-rendered pages don't ship
+// those fields to the client, a future refactor passing a whole row to a
+// Client Component would leak them into the RSC payload.
 export async function listAllUsersWithStats(): Promise<AdminUserRow[]> {
   const sql = getSql();
   const rows = (await sql`
     SELECT
-      u.*,
+      u.id,
+      u.email,
+      u.name,
+      u.is_admin,
+      u.created_at,
       COALESCE(COUNT(d.id), 0)::int AS doc_count,
       COALESCE(SUM(CASE WHEN d.paid THEN 1 ELSE 0 END), 0)::int AS paid_count,
       COALESCE(SUM(CASE WHEN d.paid THEN d.price_cents ELSE 0 END), 0)::int AS total_cents
@@ -239,7 +253,15 @@ export async function listAllDocumentsWithUser(): Promise<AdminDocumentRow[]> {
   const sql = getSql();
   const rows = (await sql`
     SELECT
-      d.*,
+      d.id,
+      d.user_id,
+      d.type,
+      d.title,
+      d.pdf_url,
+      d.paid,
+      d.price_cents,
+      d.stripe_session_id,
+      d.created_at,
       u.email AS user_email,
       u.name AS user_name
     FROM documents d
