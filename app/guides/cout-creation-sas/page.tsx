@@ -4,8 +4,8 @@ import {
   GuideSection,
   GuideCallout,
 } from "@/components/GuidePageLayout";
-import { JsonLd } from "@/components/JsonLd";
-import { SITE_URL } from "@/lib/site-url";
+import { FaqSection, type FaqItem } from "@/components/FaqSection";
+import { buildMetadata } from "@/lib/seo";
 
 const TITLE = "Combien coûte réellement la création d'une SAS en 2026 ?";
 const SLUG = "cout-creation-sas";
@@ -14,44 +14,44 @@ const INTRO =
 const TLDR =
   "Les formalités obligatoires (annonce légale, dépôt au greffe, INPI) coûtent environ 225 à 290 € quelle que soit la voie choisie. S'y ajoute le coût des statuts : 0 € (modèle gratuit), 80 à 300 € (legaltech, notre zone de prix), 1 000 à 3 000 € (avocat). Le capital social minimum est d'un euro mais doit être libéré à hauteur d'au moins 50 %.";
 
-const FAQS = [
+const FAQS: FaqItem[] = [
   {
-    q: "Peut-on créer une SAS avec un capital d'un euro ?",
-    a: "Oui. Le minimum légal est effectivement d'un euro. En pratique, un capital de 1 000 à 5 000 € est perçu comme plus crédible par les banques, les bailleurs et les fournisseurs, sans alourdir significativement la trésorerie de démarrage.",
+    question: "Peut-on créer une SAS avec un capital d'un euro ?",
+    answer:
+      "Oui. Le minimum légal est effectivement d'un euro. En pratique, un capital de 1 000 à 5 000 € est perçu comme plus crédible par les banques, les bailleurs et les fournisseurs, sans alourdir significativement la trésorerie de démarrage.",
   },
   {
-    q: "L'annonce légale est-elle vraiment obligatoire ?",
-    a: "Oui, pour toute société commerciale. Elle doit être publiée dans un journal habilité du département du siège social. Les tarifs sont fixés par arrêté et dépendent du nombre de caractères — comptez généralement 180 à 220 € pour une SAS.",
+    question: "L'annonce légale est-elle vraiment obligatoire ?",
+    answer:
+      "Oui, pour toute société commerciale. Elle doit être publiée dans un journal habilité du département du siège social. Les tarifs sont fixés par arrêté et dépendent du nombre de caractères — comptez généralement 180 à 220 € pour une SAS.",
   },
   {
-    q: "Faut-il un commissaire aux apports si on apporte un bien en nature ?",
-    a: "Oui, sauf si la valeur de l'apport est inférieure à 30 000 € et que la somme de tous les apports en nature ne dépasse pas la moitié du capital. En dessous de ces seuils, les associés peuvent s'en dispenser à l'unanimité. Au-delà, le commissaire aux apports est obligatoire et facture 500 à 2 000 € selon la complexité.",
+    question: "Faut-il un commissaire aux apports si on apporte un bien en nature ?",
+    answer:
+      "Oui, sauf si la valeur de l'apport est inférieure à 30 000 € et que la somme de tous les apports en nature ne dépasse pas la moitié du capital. En dessous de ces seuils, les associés peuvent s'en dispenser à l'unanimité. Au-delà, le commissaire aux apports est obligatoire et facture 500 à 2 000 € selon la complexité.",
   },
   {
-    q: "Combien coûte le dépôt de capital ?",
-    a: "Gratuit dans la plupart des banques ou chez un notaire. Le dépôt chez un notaire est payant (environ 100 à 150 €) et généralement choisi quand la banque retarde l'ouverture du compte professionnel.",
+    question: "Combien coûte le dépôt de capital ?",
+    answer:
+      "Gratuit dans la plupart des banques ou chez un notaire. Le dépôt chez un notaire est payant (environ 100 à 150 €) et généralement choisi quand la banque retarde l'ouverture du compte professionnel.",
   },
   {
-    q: "Y a-t-il des coûts récurrents après la création ?",
-    a: "Oui, essentiellement la tenue annuelle des comptes (expert-comptable : 1 500 à 3 000 € par an selon l'activité), l'approbation des comptes (un PV d'AGO par an, gratuit si vous le rédigez vous-même, 30 à 50 € via une legaltech), et le dépôt des comptes au greffe (environ 50 € par dépôt).",
+    question: "Y a-t-il des coûts récurrents après la création ?",
+    answer:
+      "Oui, essentiellement la tenue annuelle des comptes (expert-comptable : 1 500 à 3 000 € par an selon l'activité), l'approbation des comptes (un PV d'AGO par an, gratuit si vous le rédigez vous-même, 30 à 50 € via une legaltech), et le dépôt des comptes au greffe (environ 50 € par dépôt).",
   },
 ];
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: TITLE,
   description:
     "Coût de création d'une SAS : formalités obligatoires, statuts (gratuit, legaltech, avocat), capital social, commissaire aux apports éventuel. Décomposition chiffrée complète.",
-  alternates: { canonical: `/guides/${SLUG}` },
-  openGraph: {
-    url: `${SITE_URL}/guides/${SLUG}`,
-    title: `${TITLE} | Guides QuickLegal`,
-  },
-};
+  path: `/guides/${SLUG}`,
+});
 
 export default function CoutCreationSasPage() {
   return (
-    <>
-      <GuidePageLayout
+    <GuidePageLayout
         slug={SLUG}
         eyebrow="Coût"
         title={TITLE}
@@ -250,43 +250,9 @@ export default function CoutCreationSasPage() {
         </GuideSection>
 
         <GuideSection title="Questions fréquentes">
-          <div className="space-y-3">
-            {FAQS.map((faq) => (
-              <details
-                key={faq.q}
-                className="group rounded-xl border border-slate-200 bg-white p-5"
-              >
-                <summary className="flex justify-between items-start gap-4 cursor-pointer font-medium text-slate-900 text-sm list-none">
-                  {faq.q}
-                  <span
-                    aria-hidden="true"
-                    className="text-slate-400 text-lg leading-none transition-transform group-open:rotate-45"
-                  >
-                    +
-                  </span>
-                </summary>
-                <p className="mt-3 text-slate-600 text-sm leading-relaxed">
-                  {faq.a}
-                </p>
-              </details>
-            ))}
-          </div>
+          <FaqSection faqs={FAQS} />
         </GuideSection>
       </GuidePageLayout>
-
-      <JsonLd
-        id="ld-faq"
-        data={{
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          mainEntity: FAQS.map((f) => ({
-            "@type": "Question",
-            name: f.q,
-            acceptedAnswer: { "@type": "Answer", text: f.a },
-          })),
-        }}
-      />
-    </>
   );
 }
 

@@ -4,8 +4,9 @@ import {
   GuideSection,
   GuideCallout,
 } from "@/components/GuidePageLayout";
-import { JsonLd } from "@/components/JsonLd";
-import { SITE_URL } from "@/lib/site-url";
+import { FaqSection, type FaqItem } from "@/components/FaqSection";
+import { ComparisonTable } from "@/components/ComparisonTable";
+import { buildMetadata } from "@/lib/seo";
 
 const TITLE = "AGO ou AGE : quelle assemblée tenir et pour quelle décision ?";
 const SLUG = "ago-vs-age";
@@ -14,44 +15,44 @@ const INTRO =
 const TLDR =
   "AGO pour tout ce qui ne touche pas aux statuts : approbation des comptes, affectation du résultat, quitus, renouvellement d'un mandat. AGE pour toute modification des statuts, y compris le transfert de siège, l'augmentation de capital, la transformation et la dissolution. Les deux peuvent être combinées en une seule assemblée mixte quand c'est cohérent.";
 
-const FAQS = [
+const FAQS: FaqItem[] = [
   {
-    q: "Peut-on tenir une AGO et une AGE le même jour ?",
-    a: "Oui, c'est fréquent. On parle alors d'assemblée mixte : l'ordre du jour mentionne distinctement les résolutions ordinaires et extraordinaires, et le PV applique les règles de majorité propres à chaque catégorie de résolutions. Notre modèle de convocation supporte le type « mixte ».",
+    question: "Peut-on tenir une AGO et une AGE le même jour ?",
+    answer:
+      "Oui, c'est fréquent. On parle alors d'assemblée mixte : l'ordre du jour mentionne distinctement les résolutions ordinaires et extraordinaires, et le PV applique les règles de majorité propres à chaque catégorie de résolutions. Notre modèle de convocation supporte le type « mixte ».",
   },
   {
-    q: "L'AGO d'approbation des comptes est-elle annuelle ?",
-    a: "Oui. Les articles L.223-26 (SARL) et L.225-100 (SA) imposent la tenue d'une AGO dans les six mois qui suivent la clôture de l'exercice. En SAS, les statuts fixent le délai, généralement aligné sur ces dispositions. À défaut de tenue dans les délais, la responsabilité du dirigeant peut être engagée.",
+    question: "L'AGO d'approbation des comptes est-elle annuelle ?",
+    answer:
+      "Oui. Les articles L.223-26 (SARL) et L.225-100 (SA) imposent la tenue d'une AGO dans les six mois qui suivent la clôture de l'exercice. En SAS, les statuts fixent le délai, généralement aligné sur ces dispositions. À défaut de tenue dans les délais, la responsabilité du dirigeant peut être engagée.",
   },
   {
-    q: "Quelle majorité pour une AGE en SAS ?",
-    a: "En SAS, la majorité applicable à une AGE est fixée par les statuts (article L.227-9 C. com.). La liberté est quasi totale : unanimité pour les décisions les plus structurantes, majorité renforcée ou simple pour le reste. Lisez toujours vos statuts avant de convoquer.",
+    question: "Quelle majorité pour une AGE en SAS ?",
+    answer:
+      "En SAS, la majorité applicable à une AGE est fixée par les statuts (article L.227-9 C. com.). La liberté est quasi totale : unanimité pour les décisions les plus structurantes, majorité renforcée ou simple pour le reste. Lisez toujours vos statuts avant de convoquer.",
   },
   {
-    q: "Le transfert de siège est-il une AGE ?",
-    a: "Oui, car il modifie les statuts (article relatif au siège social). Dans certaines formes sociales, le transfert dans le même département peut être décidé par le dirigeant sous réserve de ratification en AGE. Renseignez-vous sur ce qu'autorisent vos statuts avant de choisir le type d'assemblée.",
+    question: "Le transfert de siège est-il une AGE ?",
+    answer:
+      "Oui, car il modifie les statuts (article relatif au siège social). Dans certaines formes sociales, le transfert dans le même département peut être décidé par le dirigeant sous réserve de ratification en AGE. Renseignez-vous sur ce qu'autorisent vos statuts avant de choisir le type d'assemblée.",
   },
   {
-    q: "Faut-il publier une annonce légale après une AGE ?",
-    a: "Oui pour toutes les décisions modifiant les éléments publiés au RCS : dénomination, siège, capital, forme, objet, dirigeants. L'annonce légale précède l'inscription modificative au greffe. Les décisions d'AGO n'exigent pas d'annonce légale — seul le dépôt des comptes annuels est à faire.",
+    question: "Faut-il publier une annonce légale après une AGE ?",
+    answer:
+      "Oui pour toutes les décisions modifiant les éléments publiés au RCS : dénomination, siège, capital, forme, objet, dirigeants. L'annonce légale précède l'inscription modificative au greffe. Les décisions d'AGO n'exigent pas d'annonce légale — seul le dépôt des comptes annuels est à faire.",
   },
 ];
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: TITLE,
   description:
     "AGO ou AGE : la bonne assemblée pour chaque décision. Différences de majorité, formalités de publicité, règles propres à chaque forme (SAS, SARL, SCI, SNC).",
-  alternates: { canonical: `/guides/${SLUG}` },
-  openGraph: {
-    url: `${SITE_URL}/guides/${SLUG}`,
-    title: `${TITLE} | Guides QuickLegal`,
-  },
-};
+  path: `/guides/${SLUG}`,
+});
 
 export default function AgoVsAgePage() {
   return (
-    <>
-      <GuidePageLayout
+    <GuidePageLayout
         slug={SLUG}
         eyebrow="Comparatif"
         title={TITLE}
@@ -120,65 +121,19 @@ export default function AgoVsAgePage() {
         </GuideSection>
 
         <GuideSection title="Comparaison ligne à ligne">
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm border-collapse">
-              <thead>
-                <tr>
-                  <th className="text-left py-3 px-2 font-semibold text-slate-900 border-b border-slate-200 w-1/3">
-                    Critère
-                  </th>
-                  <th className="text-left py-3 px-2 font-semibold text-slate-900 border-b border-slate-200">
-                    AGO
-                  </th>
-                  <th className="text-left py-3 px-2 font-semibold text-slate-900 border-b border-slate-200">
-                    AGE
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="text-slate-700">
-                <Row
-                  a="Objet"
-                  b="Décisions courantes ne modifiant pas les statuts"
-                  c="Modification des statuts et décisions structurantes"
-                />
-                <Row
-                  a="Fréquence"
-                  b="Au moins une fois par an (approbation des comptes)"
-                  c="Au besoin, sans calendrier fixe"
-                />
-                <Row
-                  a="Quorum SARL (1re convoc.)"
-                  b="Aucun quorum légal obligatoire"
-                  c="1/4 des parts sociales"
-                />
-                <Row
-                  a="Majorité SARL"
-                  b="Majorité simple des parts détenues par les associés présents ou représentés"
-                  c="2/3 des parts détenues par les associés présents ou représentés (sociétés postérieures à août 2005)"
-                />
-                <Row
-                  a="Majorité SAS"
-                  b="Fixée par les statuts"
-                  c="Fixée par les statuts — souvent renforcée"
-                />
-                <Row
-                  a="Majorité SCI"
-                  b="Fixée par les statuts (souvent majorité simple)"
-                  c="Souvent unanimité sauf clause contraire (art. 1836 C. civ.)"
-                />
-                <Row
-                  a="Majorité SNC"
-                  b="Unanimité par défaut (sauf clause statutaire)"
-                  c="Unanimité (art. L.221-6 C. com.)"
-                />
-                <Row
-                  a="Formalités après AG"
-                  b="Dépôt des comptes au greffe dans le mois"
-                  c="Annonce légale + inscription modificative au RCS"
-                />
-              </tbody>
-            </table>
-          </div>
+          <ComparisonTable
+            columns={["Critère", "AGO", "AGE"]}
+            rows={[
+              { label: "Objet", values: ["Décisions courantes ne modifiant pas les statuts", "Modification des statuts et décisions structurantes"] },
+              { label: "Fréquence", values: ["Au moins une fois par an (approbation des comptes)", "Au besoin, sans calendrier fixe"] },
+              { label: "Quorum SARL (1re convoc.)", values: ["Aucun quorum légal obligatoire", "1/4 des parts sociales"] },
+              { label: "Majorité SARL", values: ["Majorité simple des parts détenues par les associés présents ou représentés", "2/3 des parts détenues par les associés présents ou représentés (sociétés postérieures à août 2005)"] },
+              { label: "Majorité SAS", values: ["Fixée par les statuts", "Fixée par les statuts — souvent renforcée"] },
+              { label: "Majorité SCI", values: ["Fixée par les statuts (souvent majorité simple)", "Souvent unanimité sauf clause contraire (art. 1836 C. civ.)"] },
+              { label: "Majorité SNC", values: ["Unanimité par défaut (sauf clause statutaire)", "Unanimité (art. L.221-6 C. com.)"] },
+              { label: "Formalités après AG", values: ["Dépôt des comptes au greffe dans le mois", "Annonce légale + inscription modificative au RCS"] },
+            ]}
+          />
         </GuideSection>
 
         <GuideSection title="Les décisions typiques d'une AGO">
@@ -272,60 +227,18 @@ export default function AgoVsAgePage() {
         </GuideSection>
 
         <GuideSection title="Les formalités à anticiper">
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm border-collapse">
-              <thead>
-                <tr>
-                  <th className="text-left py-3 px-2 font-semibold text-slate-900 border-b border-slate-200">
-                    Étape
-                  </th>
-                  <th className="text-left py-3 px-2 font-semibold text-slate-900 border-b border-slate-200">
-                    AGO
-                  </th>
-                  <th className="text-left py-3 px-2 font-semibold text-slate-900 border-b border-slate-200">
-                    AGE
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="text-slate-700">
-                <Row
-                  a="Convocation"
-                  b="15 jours min. en SARL (R.223-20), statuts en SAS"
-                  c="Mêmes délais légaux"
-                />
-                <Row
-                  a="Ordre du jour"
-                  b="Précis, point par point"
-                  c="Idem + rappel des textes de résolutions"
-                />
-                <Row
-                  a="Feuille de présence"
-                  b="Recommandée"
-                  c="Fortement recommandée, parfois obligatoire (SA)"
-                />
-                <Row
-                  a="PV signé"
-                  b="Signé par le bureau (Président + secrétaire si désigné)"
-                  c="Idem"
-                />
-                <Row
-                  a="Annonce légale"
-                  b="Non"
-                  c="Oui (dans un JAL du département du siège)"
-                />
-                <Row
-                  a="Inscription modificative RCS"
-                  b="Non (sauf changement d'organe)"
-                  c="Oui (au guichet unique de l'INPI)"
-                />
-                <Row
-                  a="Dépôt au greffe"
-                  b="Dépôt des comptes si AGO d'approbation"
-                  c="Dépôt du PV + statuts modifiés"
-                />
-              </tbody>
-            </table>
-          </div>
+          <ComparisonTable
+            columns={["Étape", "AGO", "AGE"]}
+            rows={[
+              { label: "Convocation", values: ["15 jours min. en SARL (R.223-20), statuts en SAS", "Mêmes délais légaux"] },
+              { label: "Ordre du jour", values: ["Précis, point par point", "Idem + rappel des textes de résolutions"] },
+              { label: "Feuille de présence", values: ["Recommandée", "Fortement recommandée, parfois obligatoire (SA)"] },
+              { label: "PV signé", values: ["Signé par le bureau (Président + secrétaire si désigné)", "Idem"] },
+              { label: "Annonce légale", values: ["Non", "Oui (dans un JAL du département du siège)"] },
+              { label: "Inscription modificative RCS", values: ["Non (sauf changement d'organe)", "Oui (au guichet unique de l'INPI)"] },
+              { label: "Dépôt au greffe", values: ["Dépôt des comptes si AGO d'approbation", "Dépôt du PV + statuts modifiés"] },
+            ]}
+          />
         </GuideSection>
 
         <GuideSection title="Les erreurs à éviter">
@@ -358,54 +271,8 @@ export default function AgoVsAgePage() {
         </GuideSection>
 
         <GuideSection title="Questions fréquentes">
-          <div className="space-y-3">
-            {FAQS.map((faq) => (
-              <details
-                key={faq.q}
-                className="group rounded-xl border border-slate-200 bg-white p-5"
-              >
-                <summary className="flex justify-between items-start gap-4 cursor-pointer font-medium text-slate-900 text-sm list-none">
-                  {faq.q}
-                  <span
-                    aria-hidden="true"
-                    className="text-slate-400 text-lg leading-none transition-transform group-open:rotate-45"
-                  >
-                    +
-                  </span>
-                </summary>
-                <p className="mt-3 text-slate-600 text-sm leading-relaxed">
-                  {faq.a}
-                </p>
-              </details>
-            ))}
-          </div>
+          <FaqSection faqs={FAQS} />
         </GuideSection>
       </GuidePageLayout>
-
-      <JsonLd
-        id="ld-faq"
-        data={{
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          mainEntity: FAQS.map((f) => ({
-            "@type": "Question",
-            name: f.q,
-            acceptedAnswer: { "@type": "Answer", text: f.a },
-          })),
-        }}
-      />
-    </>
-  );
-}
-
-function Row({ a, b, c }: { a: string; b: string; c: string }) {
-  return (
-    <tr>
-      <td className="py-2.5 px-2 font-medium text-slate-900 border-b border-slate-100 align-top">
-        {a}
-      </td>
-      <td className="py-2.5 px-2 border-b border-slate-100 align-top">{b}</td>
-      <td className="py-2.5 px-2 border-b border-slate-100 align-top">{c}</td>
-    </tr>
   );
 }

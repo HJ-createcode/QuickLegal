@@ -4,8 +4,9 @@ import {
   GuideSection,
   GuideCallout,
 } from "@/components/GuidePageLayout";
-import { JsonLd } from "@/components/JsonLd";
-import { SITE_URL } from "@/lib/site-url";
+import { FaqSection, type FaqItem } from "@/components/FaqSection";
+import { ComparisonTable } from "@/components/ComparisonTable";
+import { buildMetadata } from "@/lib/seo";
 
 const TITLE = "Où domicilier le siège social de sa société ?";
 const SLUG = "domiciliation-siege-social";
@@ -14,44 +15,44 @@ const INTRO =
 const TLDR =
   "Chez le dirigeant, chez un tiers, dans une pépinière ou via une société de domiciliation agréée. Dans tous les cas, une attestation ou un contrat prouvant votre droit d'occupation est exigé par le greffe. L'adresse du siège fixe aussi votre tribunal compétent et votre centre des impôts.";
 
-const FAQS = [
+const FAQS: FaqItem[] = [
   {
-    q: "Peut-on domicilier une société à l'adresse de son domicile locataire ?",
-    a: "Oui, mais à deux conditions : le bail ne doit pas l'interdire explicitement, et la durée maximale est de cinq ans (article L.123-11-1 du Code de commerce). Au-delà, la société doit déménager son siège. Pour un propriétaire, la domiciliation peut rester indéfiniment si le règlement de copropriété ne s'y oppose pas.",
+    question: "Peut-on domicilier une société à l'adresse de son domicile locataire ?",
+    answer:
+      "Oui, mais à deux conditions : le bail ne doit pas l'interdire explicitement, et la durée maximale est de cinq ans (article L.123-11-1 du Code de commerce). Au-delà, la société doit déménager son siège. Pour un propriétaire, la domiciliation peut rester indéfiniment si le règlement de copropriété ne s'y oppose pas.",
   },
   {
-    q: "La domiciliation chez soi donne-t-elle une adresse commerciale visible ?",
-    a: "Oui — le siège social figure sur le Kbis, sur les factures et sur toute la communication commerciale. Si la confidentialité du domicile est importante (pour des raisons de vie privée, par exemple), une société de domiciliation ou une pépinière permettent d'afficher une adresse professionnelle neutre.",
+    question: "La domiciliation chez soi donne-t-elle une adresse commerciale visible ?",
+    answer:
+      "Oui — le siège social figure sur le Kbis, sur les factures et sur toute la communication commerciale. Si la confidentialité du domicile est importante (pour des raisons de vie privée, par exemple), une société de domiciliation ou une pépinière permettent d'afficher une adresse professionnelle neutre.",
   },
   {
-    q: "Peut-on changer de siège social après la création ?",
-    a: "Oui, via une assemblée générale extraordinaire et une inscription modificative au RCS. Le nouveau siège nécessite sa propre attestation de domiciliation. Attention : si le nouveau siège change de département, une nouvelle annonce légale doit être publiée.",
+    question: "Peut-on changer de siège social après la création ?",
+    answer:
+      "Oui, via une assemblée générale extraordinaire et une inscription modificative au RCS. Le nouveau siège nécessite sa propre attestation de domiciliation. Attention : si le nouveau siège change de département, une nouvelle annonce légale doit être publiée.",
   },
   {
-    q: "Une société de domiciliation est-elle légale ?",
-    a: "Oui, à condition qu'elle soit agréée par la préfecture (article L.123-11-3 du Code de commerce). Le contrat de domiciliation suit un formalisme renforcé : durée, tarifs, obligations de réception et de transfert du courrier. Le contrat fait foi auprès du greffe en lieu et place de l'attestation classique.",
+    question: "Une société de domiciliation est-elle légale ?",
+    answer:
+      "Oui, à condition qu'elle soit agréée par la préfecture (article L.123-11-3 du Code de commerce). Le contrat de domiciliation suit un formalisme renforcé : durée, tarifs, obligations de réception et de transfert du courrier. Le contrat fait foi auprès du greffe en lieu et place de l'attestation classique.",
   },
   {
-    q: "Que dois-je fournir au greffe pour prouver le siège ?",
-    a: "Soit une attestation de domiciliation signée par la personne ayant la jouissance du local (propriétaire, locataire, occupant à titre gratuit), soit un contrat de domiciliation conclu avec une société agréée. Dans les deux cas, le greffe vérifie que l'occupant ou le domicilié dispose bien du droit d'héberger la société.",
+    question: "Que dois-je fournir au greffe pour prouver le siège ?",
+    answer:
+      "Soit une attestation de domiciliation signée par la personne ayant la jouissance du local (propriétaire, locataire, occupant à titre gratuit), soit un contrat de domiciliation conclu avec une société agréée. Dans les deux cas, le greffe vérifie que l'occupant ou le domicilié dispose bien du droit d'héberger la société.",
   },
 ];
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: TITLE,
   description:
     "Domicilier son siège social : chez soi, chez un tiers, en pépinière ou via une société agréée. Avantages, contraintes, pièces à fournir au greffe et durée maximale.",
-  alternates: { canonical: `/guides/${SLUG}` },
-  openGraph: {
-    url: `${SITE_URL}/guides/${SLUG}`,
-    title: `${TITLE} | Guides QuickLegal`,
-  },
-};
+  path: `/guides/${SLUG}`,
+});
 
 export default function DomiciliationPage() {
   return (
-    <>
-      <GuidePageLayout
+    <GuidePageLayout
         slug={SLUG}
         eyebrow="Pratique"
         title={TITLE}
@@ -102,45 +103,15 @@ export default function DomiciliationPage() {
             du siège social d&apos;une société. Chacun répond à un besoin
             différent et s&apos;accompagne d&apos;un formalisme spécifique.
           </p>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm border-collapse">
-              <thead>
-                <tr>
-                  <th className="text-left py-3 px-2 font-semibold text-slate-900 border-b border-slate-200">
-                    Option
-                  </th>
-                  <th className="text-left py-3 px-2 font-semibold text-slate-900 border-b border-slate-200">
-                    Idéal pour
-                  </th>
-                  <th className="text-left py-3 px-2 font-semibold text-slate-900 border-b border-slate-200">
-                    Pièce à produire
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="text-slate-700">
-                <Row
-                  a="Domicile du dirigeant"
-                  b="Projet démarrant sans local commercial, petite structure"
-                  c="Attestation de domiciliation signée par le dirigeant"
-                />
-                <Row
-                  a="Local d'un tiers"
-                  b="Accueil chez un proche, chez un associé ou chez une société du groupe"
-                  c="Attestation signée par l'occupant du local"
-                />
-                <Row
-                  a="Pépinière ou incubateur"
-                  b="Startups, projets à accompagnement, besoin de locaux partagés"
-                  c="Contrat d'hébergement + attestation émise par la pépinière"
-                />
-                <Row
-                  a="Société de domiciliation agréée"
-                  b="Image professionnelle, confidentialité du domicile, adresse prestigieuse"
-                  c="Contrat de domiciliation conforme à l'art. R.123-166-1 C. com."
-                />
-              </tbody>
-            </table>
-          </div>
+          <ComparisonTable
+            columns={["Option", "Idéal pour", "Pièce à produire"]}
+            rows={[
+              { label: "Domicile du dirigeant", values: ["Projet démarrant sans local commercial, petite structure", "Attestation de domiciliation signée par le dirigeant"] },
+              { label: "Local d'un tiers", values: ["Accueil chez un proche, chez un associé ou chez une société du groupe", "Attestation signée par l'occupant du local"] },
+              { label: "Pépinière ou incubateur", values: ["Startups, projets à accompagnement, besoin de locaux partagés", "Contrat d'hébergement + attestation émise par la pépinière"] },
+              { label: "Société de domiciliation agréée", values: ["Image professionnelle, confidentialité du domicile, adresse prestigieuse", "Contrat de domiciliation conforme à l'art. R.123-166-1 C. com."] },
+            ]}
+          />
         </GuideSection>
 
         <GuideSection title="1. Domicilier chez le dirigeant">
@@ -303,54 +274,8 @@ export default function DomiciliationPage() {
         </GuideSection>
 
         <GuideSection title="Questions fréquentes">
-          <div className="space-y-3">
-            {FAQS.map((faq) => (
-              <details
-                key={faq.q}
-                className="group rounded-xl border border-slate-200 bg-white p-5"
-              >
-                <summary className="flex justify-between items-start gap-4 cursor-pointer font-medium text-slate-900 text-sm list-none">
-                  {faq.q}
-                  <span
-                    aria-hidden="true"
-                    className="text-slate-400 text-lg leading-none transition-transform group-open:rotate-45"
-                  >
-                    +
-                  </span>
-                </summary>
-                <p className="mt-3 text-slate-600 text-sm leading-relaxed">
-                  {faq.a}
-                </p>
-              </details>
-            ))}
-          </div>
+          <FaqSection faqs={FAQS} />
         </GuideSection>
       </GuidePageLayout>
-
-      <JsonLd
-        id="ld-faq"
-        data={{
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          mainEntity: FAQS.map((f) => ({
-            "@type": "Question",
-            name: f.q,
-            acceptedAnswer: { "@type": "Answer", text: f.a },
-          })),
-        }}
-      />
-    </>
-  );
-}
-
-function Row({ a, b, c }: { a: string; b: string; c: string }) {
-  return (
-    <tr>
-      <td className="py-2.5 px-2 font-medium text-slate-900 border-b border-slate-100 align-top">
-        {a}
-      </td>
-      <td className="py-2.5 px-2 border-b border-slate-100 align-top">{b}</td>
-      <td className="py-2.5 px-2 border-b border-slate-100 align-top">{c}</td>
-    </tr>
   );
 }
