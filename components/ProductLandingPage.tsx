@@ -2,6 +2,8 @@ import Link from "next/link";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { JsonLd } from "@/components/JsonLd";
+import { TableOfContents } from "@/components/TableOfContents";
+import { StickyCta } from "@/components/StickyCta";
 import { SITE_URL } from "@/lib/site-url";
 import {
   CATEGORY_LABELS,
@@ -9,6 +11,17 @@ import {
   type DocumentDefinition,
 } from "@/lib/document-registry";
 import type { ProductPageContent } from "@/lib/product-content/types";
+
+const TOC_ITEMS = [
+  { label: "À quoi sert ce document", anchor: "introduction" },
+  { label: "À qui il s'adresse", anchor: "audience" },
+  { label: "Ce qu'il contient", anchor: "contenu" },
+  { label: "Inclus dans le prix", anchor: "inclus" },
+  { label: "Comment ça fonctionne", anchor: "fonctionnement" },
+  { label: "Erreurs à éviter", anchor: "erreurs" },
+  { label: "Questions fréquentes", anchor: "faq" },
+  { label: "Documents liés", anchor: "lies" },
+];
 
 interface ProductLandingPageProps {
   doc: DocumentDefinition;
@@ -36,7 +49,7 @@ export function ProductLandingPage({ doc, content }: ProductLandingPageProps) {
     .filter((d): d is DocumentDefinition => !!d);
 
   return (
-    <main>
+    <main className="pb-20 sm:pb-0">
       <SiteNav current="/generation-document" />
 
       {/* HERO */}
@@ -98,8 +111,15 @@ export function ProductLandingPage({ doc, content }: ProductLandingPageProps) {
         </div>
       </section>
 
+      {/* TABLE OF CONTENTS */}
+      <section className="px-6 -mt-2 mb-4">
+        <div className="max-w-3xl mx-auto">
+          <TableOfContents items={TOC_ITEMS} />
+        </div>
+      </section>
+
       {/* INTRODUCTION */}
-      <section className="py-12 px-6">
+      <section id="introduction" className="py-12 px-6 scroll-mt-24">
         <div className="max-w-3xl mx-auto space-y-4">
           <h2 className="font-serif text-2xl font-bold text-slate-900">
             À quoi sert {doc.label.toLowerCase()}
@@ -113,7 +133,7 @@ export function ProductLandingPage({ doc, content }: ProductLandingPageProps) {
       </section>
 
       {/* AUDIENCE + TIMING */}
-      <section className="py-12 px-6 bg-slate-50/50 border-y border-slate-100">
+      <section id="audience" className="py-12 px-6 bg-slate-50/50 border-y border-slate-100 scroll-mt-24">
         <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-10">
           <div>
             <h2 className="font-serif text-2xl font-bold text-slate-900 mb-3">
@@ -151,7 +171,7 @@ export function ProductLandingPage({ doc, content }: ProductLandingPageProps) {
       </section>
 
       {/* CONTAINS */}
-      <section className="py-12 px-6">
+      <section id="contenu" className="py-12 px-6 scroll-mt-24">
         <div className="max-w-5xl mx-auto">
           <h2 className="font-serif text-2xl font-bold text-slate-900 mb-3">
             Ce que contient votre document
@@ -186,7 +206,7 @@ export function ProductLandingPage({ doc, content }: ProductLandingPageProps) {
       </section>
 
       {/* INCLUDED / NOT INCLUDED */}
-      <section className="py-12 px-6 bg-slate-50/50 border-y border-slate-100">
+      <section id="inclus" className="py-12 px-6 bg-slate-50/50 border-y border-slate-100 scroll-mt-24">
         <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-10">
           <div>
             <h3 className="font-serif text-xl font-semibold text-slate-900 mb-4">
@@ -248,7 +268,7 @@ export function ProductLandingPage({ doc, content }: ProductLandingPageProps) {
       </section>
 
       {/* HOW IT WORKS */}
-      <section className="py-12 px-6">
+      <section id="fonctionnement" className="py-12 px-6 scroll-mt-24">
         <div className="max-w-5xl mx-auto">
           <h2 className="font-serif text-2xl font-bold text-slate-900 mb-8">
             Comment ça fonctionne
@@ -294,7 +314,7 @@ export function ProductLandingPage({ doc, content }: ProductLandingPageProps) {
       </section>
 
       {/* MISTAKES */}
-      <section className="py-16 px-6">
+      <section id="erreurs" className="py-16 px-6 scroll-mt-24">
         <div className="max-w-3xl mx-auto">
           <h2 className="font-serif text-2xl font-bold text-slate-900 mb-8">
             Erreurs fréquentes à éviter
@@ -318,7 +338,7 @@ export function ProductLandingPage({ doc, content }: ProductLandingPageProps) {
       </section>
 
       {/* FAQ */}
-      <section className="py-16 px-6 bg-slate-50/50 border-y border-slate-100">
+      <section id="faq" className="py-16 px-6 bg-slate-50/50 border-y border-slate-100 scroll-mt-24">
         <div className="max-w-3xl mx-auto">
           <h2 className="font-serif text-2xl font-bold text-slate-900 mb-8">
             Questions fréquentes
@@ -349,7 +369,7 @@ export function ProductLandingPage({ doc, content }: ProductLandingPageProps) {
 
       {/* RELATED */}
       {relatedDefs.length > 0 && (
-        <section className="py-16 px-6">
+        <section id="lies" className="py-16 px-6 scroll-mt-24">
           <div className="max-w-5xl mx-auto">
             <h2 className="font-serif text-2xl font-bold text-slate-900 mb-6">
               Documents liés
@@ -399,6 +419,17 @@ export function ProductLandingPage({ doc, content }: ProductLandingPageProps) {
       </section>
 
       <SiteFooter />
+
+      {/* Sticky CTA — visible uniquement sur petits écrans pour ne pas
+          parasiter le confort de lecture desktop. */}
+      <div className="sm:hidden">
+        <StickyCta
+          label={`${doc.label} — ${euros} € TTC`}
+          hint="Conservé à vie · Sans abonnement"
+          href={startUrl}
+          ctaText="Commencer"
+        />
+      </div>
 
       {/* Structured data : Product + FAQPage */}
       <JsonLd

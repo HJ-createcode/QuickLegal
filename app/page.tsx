@@ -17,6 +17,16 @@ import {
 } from "@/lib/document-registry";
 import { CATEGORY_CONTENT } from "@/lib/category-content";
 import { getCatalogPriceRange } from "@/lib/site-facts";
+import { GUIDES } from "@/lib/guides-registry";
+
+// Slugs mis en avant dans la section guides de la home — choisis pour
+// la diversité d'intentions (décision, coût, sélection prestataire).
+const HOME_GUIDE_SLUGS = [
+  "sas-vs-sasu",
+  "sci-ir-ou-is",
+  "cout-creation-sas",
+  "avocat-vs-legaltech-vs-gratuit",
+];
 
 export const metadata: Metadata = {
   title: {
@@ -512,8 +522,61 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* FAQ */}
+      {/* GUIDES PREVIEW */}
       <section className="py-20 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
+            <div>
+              <p className="text-blue-500 text-sm font-semibold uppercase tracking-widest mb-3">
+                Avant de générer
+              </p>
+              <h2 className="font-serif text-4xl font-bold text-slate-900 mb-2">
+                Comprendre, comparer, décider
+              </h2>
+              <p className="text-slate-600 text-sm max-w-2xl">
+                Une poignée de guides courts pour trancher les questions les
+                plus fréquentes avant de remplir un questionnaire.
+              </p>
+            </div>
+            <Link
+              href="/guides"
+              className="text-sm font-medium text-blue-500 hover:text-blue-600 whitespace-nowrap"
+            >
+              Tous les guides →
+            </Link>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {HOME_GUIDE_SLUGS.map((slug) => {
+              const guide = GUIDES.find((g) => g.slug === slug);
+              if (!guide) return null;
+              return (
+                <Link
+                  key={guide.slug}
+                  href={`/guides/${guide.slug}`}
+                  className="block p-5 rounded-2xl border border-slate-200 bg-white hover:border-blue-300 hover:shadow-premium transition"
+                >
+                  <p className="text-xs text-blue-500 font-semibold uppercase tracking-wider mb-2">
+                    {guide.eyebrow}
+                  </p>
+                  <h3 className="font-serif text-lg font-semibold text-slate-900 mb-2 leading-snug">
+                    {guide.title}
+                  </h3>
+                  <p className="text-slate-500 text-xs leading-relaxed mb-3">
+                    {guide.summary}
+                  </p>
+                  <p className="text-blue-500 text-xs font-medium">
+                    Lire le guide →
+                  </p>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="py-20 px-6 bg-slate-50/40 border-y border-slate-100">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-10">
             <p className="text-blue-500 text-sm font-semibold uppercase tracking-widest mb-3">
