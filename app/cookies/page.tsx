@@ -100,7 +100,7 @@ export default function CookiesPage() {
           ) : (
             <a
               href={`mailto:${CONTACT.dpoEmail}`}
-              className="text-blue-500 hover:text-blue-600"
+              className="text-emerald-700 hover:text-emerald-800"
             >
               {CONTACT.dpoEmail}
             </a>

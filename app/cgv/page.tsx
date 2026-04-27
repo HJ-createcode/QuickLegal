@@ -58,7 +58,7 @@ export default function CGVPage() {
             </span>
           )}
           , dont les coordonnées complètes figurent dans les{" "}
-          <a href="/mentions-legales" className="text-blue-500 hover:text-blue-600">
+          <a href="/mentions-legales" className="text-emerald-700 hover:text-emerald-800">
             mentions légales
           </a>
           .
@@ -70,7 +70,7 @@ export default function CGVPage() {
           ) : (
             <a
               href={`mailto:${CONTACT.supportEmail}`}
-              className="text-blue-500 hover:text-blue-600"
+              className="text-emerald-700 hover:text-emerald-800"
             >
               {CONTACT.supportEmail}
             </a>
@@ -182,7 +182,7 @@ export default function CGVPage() {
           ) : (
             <a
               href={`mailto:${CONTACT.supportEmail}`}
-              className="text-blue-500 hover:text-blue-600"
+              className="text-emerald-700 hover:text-emerald-800"
             >
               {CONTACT.supportEmail}
             </a>
@@ -228,7 +228,7 @@ export default function CGVPage() {
           Le traitement des données personnelles du client est régi par la{" "}
           <a
             href="/politique-de-confidentialite"
-            className="text-blue-500 hover:text-blue-600"
+            className="text-emerald-700 hover:text-emerald-800"
           >
             politique de confidentialité
           </a>
@@ -249,7 +249,7 @@ export default function CGVPage() {
             href={MEDIATOR.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-blue-500 hover:text-blue-600"
+            className="text-emerald-700 hover:text-emerald-800"
           >
             {MEDIATOR.url}
           </a>
@@ -262,7 +262,7 @@ export default function CGVPage() {
             href="https://ec.europa.eu/consumers/odr"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-blue-500 hover:text-blue-600"
+            className="text-emerald-700 hover:text-emerald-800"
           >
             ec.europa.eu/consumers/odr
           </a>

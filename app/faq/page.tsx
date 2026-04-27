@@ -178,7 +178,7 @@ export default function FAQPage() {
           <div className="flex flex-wrap gap-3 pt-3">
             <Link
               href="/generation-document"
-              className="px-5 py-2.5 rounded-xl bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium"
+              className="px-5 py-2.5 rounded-xl bg-[#0f1e3d] hover:bg-[#0a1428] text-white text-sm font-medium"
             >
               Voir le catalogue
             </Link>

@@ -235,7 +235,7 @@ export default function SasVsSasuPage() {
               fournir une{" "}
               <a
                 href="/documents/declaration-non-condamnation"
-                className="text-blue-500 hover:text-blue-600"
+                className="text-emerald-700 hover:text-emerald-800"
               >
                 déclaration de non-condamnation
               </a>{" "}
@@ -246,7 +246,7 @@ export default function SasVsSasuPage() {
               prouvant la jouissance du local — l&apos;
               <a
                 href="/documents/attestation-domiciliation"
-                className="text-blue-500 hover:text-blue-600"
+                className="text-emerald-700 hover:text-emerald-800"
               >
                 attestation de domiciliation
               </a>{" "}

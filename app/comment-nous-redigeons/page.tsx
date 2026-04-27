@@ -169,7 +169,7 @@ export default function CommentNousRedigeonsPage() {
           <li>
             <Link
               href="/notre-methode"
-              className="text-blue-500 hover:text-blue-600"
+              className="text-emerald-700 hover:text-emerald-800"
             >
               Notre méthode
             </Link>{" "}
@@ -178,7 +178,7 @@ export default function CommentNousRedigeonsPage() {
           <li>
             <Link
               href="/politique-de-confidentialite"
-              className="text-blue-500 hover:text-blue-600"
+              className="text-emerald-700 hover:text-emerald-800"
             >
               Politique de confidentialité
             </Link>{" "}
@@ -187,7 +187,7 @@ export default function CommentNousRedigeonsPage() {
           <li>
             <Link
               href="/faq"
-              className="text-blue-500 hover:text-blue-600"
+              className="text-emerald-700 hover:text-emerald-800"
             >
               Questions fréquentes
             </Link>

@@ -262,7 +262,7 @@ export function Wizard({
           ))}
           <button
             onClick={addAssocie}
-            className="w-full py-3 rounded-xl border-2 border-dashed border-slate-300 text-slate-600 hover:border-blue-400 hover:text-blue-500 hover:bg-blue-50 transition text-sm font-medium"
+            className="w-full py-3 rounded-xl border-2 border-dashed border-slate-300 text-slate-600 hover:border-emerald-400 hover:text-emerald-700 hover:bg-emerald-50 transition text-sm font-medium"
           >
             + Ajouter un associé
           </button>
@@ -282,7 +282,7 @@ export function Wizard({
           <button
             onClick={() => updateField(field.id, !value)}
             className={`relative flex-shrink-0 w-12 h-6 rounded-full transition ${
-              value ? "bg-blue-500" : "bg-slate-300"
+              value ? "bg-[#0f1e3d]" : "bg-slate-300"
             }`}
           >
             <span
@@ -362,7 +362,7 @@ export function Wizard({
       <nav className="fixed top-0 inset-x-0 z-50 border-b border-slate-200/80 bg-white/90 backdrop-blur-md">
         <div className="max-w-6xl mx-auto flex items-center justify-between px-6 h-16">
           <Link href="/" className="font-serif text-xl font-bold tracking-tight text-slate-900">
-            Quick<span className="text-blue-500">Legal</span>
+            Quick<span className="text-emerald-700">Legal</span>
           </Link>
           <span className="text-sm text-slate-500 font-medium">
             {documentLabel} — {price} €
@@ -382,7 +382,7 @@ export function Wizard({
           </div>
           <div className="h-1.5 bg-slate-200 rounded-full overflow-hidden">
             <div
-              className="h-full bg-blue-500 rounded-full transition-all duration-300"
+              className="h-full bg-[#0f1e3d] rounded-full transition-all duration-300"
               style={{ width: `${((step + 1) / totalSteps) * 100}%` }}
             />
           </div>
@@ -415,7 +415,7 @@ export function Wizard({
             <div className="mt-8 space-y-3">
               <button
                 onClick={handleStripeCheckout}
-                className="w-full py-3.5 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-semibold text-lg transition shadow-lg shadow-blue-500/20"
+                className="w-full py-3.5 rounded-xl bg-[#0f1e3d] hover:bg-[#0a1428] text-white font-semibold text-lg transition shadow-lg shadow-slate-900/10"
               >
                 Payer {price} € et télécharger
               </button>
@@ -444,7 +444,7 @@ export function Wizard({
           {!isRecap && (
             <button
               onClick={next}
-              className="px-6 py-2.5 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-medium transition shadow-sm"
+              className="px-6 py-2.5 rounded-lg bg-[#0f1e3d] hover:bg-[#0a1428] text-white font-medium transition shadow-sm"
             >
               {step === steps.length - 1 ? "Récapitulatif" : "Suivant"}
             </button>

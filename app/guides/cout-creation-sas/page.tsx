@@ -182,7 +182,7 @@ export default function CoutCreationSasPage() {
               mois. Pièce obligatoire :{" "}
               <a
                 href="/documents/attestation-domiciliation"
-                className="text-blue-500 hover:text-blue-600"
+                className="text-emerald-700 hover:text-emerald-800"
               >
                 attestation de domiciliation
               </a>
@@ -192,7 +192,7 @@ export default function CoutCreationSasPage() {
               <strong>Pièces dirigeant</strong> : une{" "}
               <a
                 href="/documents/declaration-non-condamnation"
-                className="text-blue-500 hover:text-blue-600"
+                className="text-emerald-700 hover:text-emerald-800"
               >
                 déclaration de non-condamnation
               </a>{" "}

@@ -55,7 +55,7 @@ export default function GuidesHubPage() {
               <li className="text-slate-700">Guides</li>
             </ol>
           </nav>
-          <p className="text-blue-500 text-sm font-semibold uppercase tracking-widest mb-3">
+          <p className="text-emerald-700 text-sm font-semibold uppercase tracking-widest mb-3">
             Comprendre, comparer, décider
           </p>
           <h1 className="font-serif text-5xl sm:text-6xl font-bold tracking-tight text-slate-900 mb-6 leading-[1.05]">
@@ -84,9 +84,9 @@ export default function GuidesHubPage() {
                     <Link
                       key={guide.slug}
                       href={`/guides/${guide.slug}`}
-                      className="block p-6 rounded-2xl border border-slate-200 bg-white hover:border-blue-300 hover:shadow-premium transition"
+                      className="block p-6 rounded-2xl border border-slate-200 bg-white hover:border-emerald-300 hover:shadow-premium transition"
                     >
-                      <p className="text-blue-500 text-xs font-semibold uppercase tracking-wider mb-2">
+                      <p className="text-emerald-700 text-xs font-semibold uppercase tracking-wider mb-2">
                         {guide.eyebrow}
                       </p>
                       <h3 className="font-serif text-lg font-semibold text-slate-900 mb-2">
@@ -95,7 +95,7 @@ export default function GuidesHubPage() {
                       <p className="text-slate-500 text-sm leading-relaxed">
                         {guide.summary}
                       </p>
-                      <p className="text-blue-500 text-sm font-medium mt-3">
+                      <p className="text-emerald-700 text-sm font-medium mt-3">
                         Lire le guide →
                       </p>
                     </Link>
@@ -118,7 +118,7 @@ export default function GuidesHubPage() {
           </p>
           <Link
             href="/generation-document"
-            className="inline-block px-8 py-3.5 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-semibold text-base shadow-lg shadow-blue-500/20"
+            className="inline-block px-8 py-3.5 rounded-xl bg-[#0f1e3d] hover:bg-[#0a1428] text-white font-semibold text-base shadow-lg shadow-slate-900/10"
           >
             Voir le catalogue complet
           </Link>

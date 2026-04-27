@@ -42,7 +42,7 @@ export function StickyCta({ label, href, ctaText, hint }: StickyCtaProps) {
         </div>
         <Link
           href={href}
-          className="flex-shrink-0 px-5 py-2.5 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-semibold text-sm shadow-md whitespace-nowrap"
+          className="flex-shrink-0 px-5 py-2.5 rounded-xl bg-[#0f1e3d] hover:bg-[#0a1428] text-white font-semibold text-sm shadow-md whitespace-nowrap"
         >
           {ctaText}
         </Link>

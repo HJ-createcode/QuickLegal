@@ -96,7 +96,7 @@ function LoginForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-semibold shadow-md transition disabled:opacity-50"
+              className="w-full py-3 rounded-xl bg-[#0f1e3d] hover:bg-[#0a1428] text-white font-semibold shadow-md transition disabled:opacity-50"
             >
               {loading ? "Connexion..." : "Se connecter"}
             </button>
@@ -104,7 +104,7 @@ function LoginForm() {
 
           <p className="text-center text-sm text-slate-600 mt-6">
             Pas encore de compte ?{" "}
-            <Link href="/signup" className="text-blue-500 hover:text-blue-600 font-medium">
+            <Link href="/signup" className="text-emerald-700 hover:text-emerald-800 font-medium">
               Créez-en un
             </Link>
           </p>

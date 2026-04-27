@@ -32,7 +32,7 @@ export function TableOfContents({
       aria-label={title}
       className="rounded-2xl border border-slate-200 bg-white p-5 shadow-premium"
     >
-      <p className="text-xs font-semibold text-blue-500 uppercase tracking-widest mb-3">
+      <p className="text-xs font-semibold text-emerald-700 uppercase tracking-widest mb-3">
         {title}
       </p>
       <ol className="space-y-1.5 text-sm">
@@ -46,7 +46,7 @@ export function TableOfContents({
             </span>
             <a
               href={`#${item.anchor}`}
-              className="text-slate-700 hover:text-blue-500"
+              className="text-slate-700 hover:text-emerald-700"
             >
               {item.label}
             </a>

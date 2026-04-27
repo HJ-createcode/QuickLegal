@@ -127,7 +127,7 @@ function SuccessContent() {
 
         {!status?.ready && !error && (
           <div className="flex items-center justify-center gap-3 text-slate-500 text-sm mb-6">
-            <div className="w-4 h-4 border-2 border-slate-300 border-t-blue-500 rounded-full animate-spin" />
+            <div className="w-4 h-4 border-2 border-slate-300 border-t-[#0f1e3d] rounded-full animate-spin" />
             <span>Génération en cours…</span>
           </div>
         )}
@@ -136,7 +136,7 @@ function SuccessContent() {
           <button
             onClick={triggerDownload}
             disabled={downloading}
-            className="w-full py-3.5 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-semibold text-lg shadow-md transition disabled:opacity-50"
+            className="w-full py-3.5 rounded-xl bg-[#0f1e3d] hover:bg-[#0a1428] text-white font-semibold text-lg shadow-md transition disabled:opacity-50"
           >
             {downloading ? "Téléchargement…" : "Télécharger mon document"}
           </button>
@@ -156,7 +156,7 @@ function SuccessContent() {
         </div>
 
         <div className="mt-8 flex gap-3 justify-center text-sm">
-          <Link href="/dashboard" className="text-blue-500 hover:text-blue-600 font-medium">
+          <Link href="/dashboard" className="text-emerald-700 hover:text-emerald-800 font-medium">
             Aller à mon espace
           </Link>
           <span className="text-slate-300">•</span>

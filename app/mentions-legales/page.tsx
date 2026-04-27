@@ -103,7 +103,7 @@ export default function MentionsLegalesPage() {
         <p>
           Les traitements de données personnelles mis en œuvre sur le site
           sont décrits dans la{" "}
-          <a href="/politique-de-confidentialite" className="text-blue-500 hover:text-blue-600">
+          <a href="/politique-de-confidentialite" className="text-emerald-700 hover:text-emerald-800">
             politique de confidentialité
           </a>
           . Les utilisateurs disposent des droits d&apos;accès, de
@@ -114,7 +114,7 @@ export default function MentionsLegalesPage() {
           ) : (
             <a
               href={`mailto:${CONTACT.dpoEmail}`}
-              className="text-blue-500 hover:text-blue-600"
+              className="text-emerald-700 hover:text-emerald-800"
             >
               {CONTACT.dpoEmail}
             </a>
@@ -123,7 +123,7 @@ export default function MentionsLegalesPage() {
         </p>
         <p>
           L&apos;utilisation des cookies est décrite dans la{" "}
-          <a href="/cookies" className="text-blue-500 hover:text-blue-600">
+          <a href="/cookies" className="text-emerald-700 hover:text-emerald-800">
             politique de cookies
           </a>
           .
@@ -137,7 +137,7 @@ export default function MentionsLegalesPage() {
           l&apos;utilisateur consommateur peut recourir gratuitement à un
           médiateur de la consommation dont les coordonnées sont précisées
           dans les{" "}
-          <a href="/cgv" className="text-blue-500 hover:text-blue-600">
+          <a href="/cgv" className="text-emerald-700 hover:text-emerald-800">
             conditions générales de vente
           </a>
           .

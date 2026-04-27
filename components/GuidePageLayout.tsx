@@ -88,7 +88,7 @@ export function GuidePageLayout({
               <li className="text-slate-700 truncate max-w-md">{title}</li>
             </ol>
           </nav>
-          <p className="text-blue-500 text-sm font-semibold uppercase tracking-widest mb-3">
+          <p className="text-emerald-700 text-sm font-semibold uppercase tracking-widest mb-3">
             {eyebrow}
           </p>
           <h1 className="font-serif text-4xl sm:text-5xl font-bold tracking-tight text-slate-900 mb-5 leading-[1.1]">
@@ -96,8 +96,8 @@ export function GuidePageLayout({
           </h1>
           <p className="text-lg text-slate-600 leading-relaxed mb-4">{intro}</p>
           {tldr && (
-            <div className="mt-6 p-4 rounded-xl border border-blue-100 bg-blue-50/40">
-              <p className="text-xs font-semibold text-blue-500 uppercase tracking-widest mb-1">
+            <div className="mt-6 p-4 rounded-xl border border-emerald-100 bg-emerald-50/40">
+              <p className="text-xs font-semibold text-emerald-700 uppercase tracking-widest mb-1">
                 En bref
               </p>
               <p className="text-sm text-slate-700 leading-relaxed">{tldr}</p>
@@ -120,7 +120,7 @@ export function GuidePageLayout({
       {products.length > 0 && (
         <section className="py-12 px-6 bg-slate-50/60 border-t border-slate-100">
           <div className="max-w-3xl mx-auto">
-            <p className="text-blue-500 text-xs font-semibold uppercase tracking-widest mb-3">
+            <p className="text-emerald-700 text-xs font-semibold uppercase tracking-widest mb-3">
               Passer à l&apos;action
             </p>
             <h2 className="font-serif text-2xl font-bold text-slate-900 mb-5">
@@ -132,7 +132,7 @@ export function GuidePageLayout({
                 <Link
                   key={product.slug}
                   href={`/documents/${product.slug}`}
-                  className="block p-5 rounded-2xl border border-slate-200 bg-white hover:border-blue-300 hover:shadow-premium transition"
+                  className="block p-5 rounded-2xl border border-slate-200 bg-white hover:border-emerald-300 hover:shadow-premium transition"
                 >
                   <h3 className="font-serif text-lg font-semibold text-slate-900 mb-1">
                     {product.label}
@@ -165,7 +165,7 @@ export function GuidePageLayout({
                 <li key={item.slug}>
                   <Link
                     href={`/guides/${item.slug}`}
-                    className="block p-4 rounded-xl border border-slate-200 bg-white hover:border-blue-300 transition"
+                    className="block p-4 rounded-xl border border-slate-200 bg-white hover:border-emerald-300 transition"
                   >
                     <p className="font-medium text-slate-900 text-sm">
                       {item.label}
@@ -279,7 +279,7 @@ export function GuideCallout({
   const bg =
     tone === "warning"
       ? "bg-amber-50 border-amber-200 text-amber-900"
-      : "bg-blue-50/60 border-blue-100 text-slate-800";
+      : "bg-emerald-50/60 border-emerald-100 text-slate-800";
   return (
     <div className={`my-2 p-4 rounded-xl border ${bg}`}>
       {title && (

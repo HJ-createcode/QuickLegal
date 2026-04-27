@@ -42,7 +42,7 @@ export default function PolitiqueConfidentialitePage() {
             </span>
           )}
           , dont les coordonnées sont précisées dans les{" "}
-          <a href="/mentions-legales" className="text-blue-500 hover:text-blue-600">
+          <a href="/mentions-legales" className="text-emerald-700 hover:text-emerald-800">
             mentions légales
           </a>
           .
@@ -54,7 +54,7 @@ export default function PolitiqueConfidentialitePage() {
           ) : (
             <a
               href={`mailto:${CONTACT.dpoEmail}`}
-              className="text-blue-500 hover:text-blue-600"
+              className="text-emerald-700 hover:text-emerald-800"
             >
               {CONTACT.dpoEmail}
             </a>
@@ -208,7 +208,7 @@ export default function PolitiqueConfidentialitePage() {
           ) : (
             <a
               href={`mailto:${CONTACT.dpoEmail}`}
-              className="text-blue-500 hover:text-blue-600"
+              className="text-emerald-700 hover:text-emerald-800"
             >
               {CONTACT.dpoEmail}
             </a>
@@ -223,7 +223,7 @@ export default function PolitiqueConfidentialitePage() {
             href="https://www.cnil.fr"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-blue-500 hover:text-blue-600"
+            className="text-emerald-700 hover:text-emerald-800"
           >
             www.cnil.fr
           </a>

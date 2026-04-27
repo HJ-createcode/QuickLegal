@@ -84,7 +84,7 @@ export default function GenerationDocumentPage() {
             </ol>
           </nav>
 
-          <p className="text-blue-500 text-sm font-semibold uppercase tracking-widest mb-3">
+          <p className="text-emerald-700 text-sm font-semibold uppercase tracking-widest mb-3">
             Notre catalogue
           </p>
           <h1 className="font-serif text-5xl sm:text-6xl font-bold tracking-tight mb-6 leading-[1.05] text-slate-900">
@@ -101,7 +101,7 @@ export default function GenerationDocumentPage() {
               <a
                 key={cat}
                 href={`#${cat}`}
-                className="px-3 py-1.5 rounded-full border border-slate-200 bg-white text-slate-700 hover:border-blue-300 hover:text-blue-500 transition"
+                className="px-3 py-1.5 rounded-full border border-slate-200 bg-white text-slate-700 hover:border-emerald-300 hover:text-emerald-700 transition"
               >
                 {CATEGORY_LABELS[cat]}
               </a>
@@ -131,7 +131,7 @@ export default function GenerationDocumentPage() {
               <section key={cat} id={cat} className="scroll-mt-24">
                 <div className="mb-8 md:flex md:items-start md:justify-between md:gap-10">
                   <div className="md:max-w-xl mb-4 md:mb-0">
-                    <p className="text-blue-500 text-xs font-semibold uppercase tracking-widest mb-2">
+                    <p className="text-emerald-700 text-xs font-semibold uppercase tracking-widest mb-2">
                       {content.byline}
                     </p>
                     <h2 className="font-serif text-3xl font-bold text-slate-900 mb-3">
@@ -167,7 +167,7 @@ export default function GenerationDocumentPage() {
       {/* RÉASSURANCE + METHODE */}
       <section className="py-16 px-6 bg-slate-50/60 border-y border-slate-100">
         <div className="max-w-4xl mx-auto text-center">
-          <p className="text-blue-500 text-sm font-semibold uppercase tracking-widest mb-3">
+          <p className="text-emerald-700 text-sm font-semibold uppercase tracking-widest mb-3">
             Notre promesse éditoriale
           </p>
           <h2 className="font-serif text-3xl font-bold text-slate-900 mb-4">
@@ -319,10 +319,10 @@ function DocumentCard({ doc }: { doc: DocumentDefinition }) {
   return (
     <Link
       href={`/documents/${doc.type}`}
-      className="group block rounded-2xl bg-white border border-slate-200 p-7 shadow-premium hover:shadow-premium-hover hover:border-blue-300 transition-all hover:-translate-y-0.5"
+      className="group block rounded-2xl bg-white border border-slate-200 p-7 shadow-premium hover:shadow-premium-hover hover:border-emerald-300 transition-all hover:-translate-y-0.5"
     >
       <div className="mb-4">
-        <h3 className="font-serif text-2xl font-bold text-slate-900 mb-1.5 group-hover:text-blue-500 transition-colors">
+        <h3 className="font-serif text-2xl font-bold text-slate-900 mb-1.5 group-hover:text-emerald-700 transition-colors">
           {doc.label}
         </h3>
         <p className="text-slate-600 text-sm leading-relaxed">
@@ -347,7 +347,7 @@ function DocumentCard({ doc }: { doc: DocumentDefinition }) {
             className="flex items-center gap-2 text-xs text-slate-600"
           >
             <svg
-              className="w-3.5 h-3.5 text-blue-500 flex-shrink-0"
+              className="w-3.5 h-3.5 text-emerald-700 flex-shrink-0"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -364,7 +364,7 @@ function DocumentCard({ doc }: { doc: DocumentDefinition }) {
         ))}
       </ul>
 
-      <p className="text-sm font-medium text-blue-500 group-hover:text-blue-600">
+      <p className="text-sm font-medium text-emerald-700 group-hover:text-emerald-800">
         Voir la page du document →
       </p>
     </Link>

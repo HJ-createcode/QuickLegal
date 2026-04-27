@@ -41,7 +41,7 @@ export function SiteNavClient({ variant = "transparent", current }: SiteNavClien
       <div className="max-w-6xl mx-auto flex items-center justify-between px-6 h-16">
         <Link href="/" className="flex items-center gap-2">
           <span className="font-serif text-2xl font-bold tracking-tight text-slate-900">
-            Quick<span className="text-blue-500">Legal</span>
+            Quick<span className="text-emerald-700">Legal</span>
           </span>
         </Link>
         <div className="hidden md:flex items-center gap-7 text-sm">
@@ -73,8 +73,8 @@ export function SiteNavClient({ variant = "transparent", current }: SiteNavClien
             href="/signup"
             className={
               current === "/signup"
-                ? "px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-semibold shadow-sm"
-                : "px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium shadow-sm"
+                ? "px-4 py-2 rounded-lg bg-[#0a1428] text-white text-sm font-semibold shadow-sm"
+                : "px-4 py-2 rounded-lg bg-[#0f1e3d] hover:bg-[#0a1428] text-white text-sm font-medium shadow-sm"
             }
           >
             Créer un compte

@@ -20,7 +20,7 @@ const TYPE_LABELS: Record<string, string> = {
 };
 
 const TYPE_COLORS: Record<string, string> = {
-  "statuts-sas": "bg-blue-50 text-blue-700 border-blue-200",
+  "statuts-sas": "bg-emerald-50 text-emerald-700 border-emerald-200",
   "statuts-sci": "bg-indigo-50 text-indigo-700 border-indigo-200",
   "cgv-ecommerce": "bg-emerald-50 text-emerald-700 border-emerald-200",
   nda: "bg-amber-50 text-amber-700 border-amber-200",
@@ -56,7 +56,7 @@ export default async function DashboardPage() {
       <nav className="border-b border-slate-200/80 bg-white/90 backdrop-blur-md">
         <div className="max-w-6xl mx-auto flex items-center justify-between px-6 h-16">
           <Link href="/" className="font-serif text-xl font-bold text-slate-900">
-            Quick<span className="text-blue-500">Legal</span>
+            Quick<span className="text-emerald-700">Legal</span>
           </Link>
           <div className="flex items-center gap-4">
             {isAdmin && (
@@ -95,7 +95,7 @@ export default async function DashboardPage() {
           </div>
           <Link
             href="/generation-document"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-semibold text-sm shadow-md"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#0f1e3d] hover:bg-[#0a1428] text-white font-semibold text-sm shadow-md"
           >
             + Nouveau document
           </Link>
@@ -109,8 +109,8 @@ export default async function DashboardPage() {
 
         {!dbError && documents.length === 0 && (
           <div className="bg-white rounded-2xl shadow-premium border border-slate-200 p-12 text-center">
-            <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+            <div className="w-16 h-16 rounded-2xl bg-emerald-50 flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-emerald-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
               </svg>
             </div>
@@ -122,7 +122,7 @@ export default async function DashboardPage() {
             </p>
             <Link
               href="/generation-document"
-              className="inline-block px-6 py-3 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-semibold text-sm shadow-md"
+              className="inline-block px-6 py-3 rounded-xl bg-[#0f1e3d] hover:bg-[#0a1428] text-white font-semibold text-sm shadow-md"
             >
               Voir nos documents
             </Link>
@@ -168,7 +168,7 @@ export default async function DashboardPage() {
                     {doc.pdf_url && (
                       <a
                         href={`/api/documents/${doc.id}/download`}
-                        className="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium"
+                        className="px-4 py-2 rounded-lg bg-[#0f1e3d] hover:bg-[#0a1428] text-white text-sm font-medium"
                       >
                         Télécharger
                       </a>

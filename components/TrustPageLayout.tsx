@@ -46,7 +46,7 @@ export function TrustPageLayout({
             </ol>
           </nav>
           {eyebrow && (
-            <p className="text-blue-500 text-sm font-semibold uppercase tracking-widest mb-3">
+            <p className="text-emerald-700 text-sm font-semibold uppercase tracking-widest mb-3">
               {eyebrow}
             </p>
           )}

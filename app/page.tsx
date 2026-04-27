@@ -130,7 +130,7 @@ export default function HomePage() {
           <h1 className="font-serif text-5xl sm:text-7xl font-bold tracking-tight mb-8 leading-[1.05] text-slate-900">
             Vos documents juridiques,
             <br />
-            <span className="italic text-blue-500">signés en 10 minutes.</span>
+            <span className="italic text-emerald-700">signés en 10 minutes.</span>
           </h1>
 
           <p className="text-lg sm:text-xl text-slate-600 max-w-2xl mx-auto mb-10 leading-relaxed">
@@ -143,7 +143,7 @@ export default function HomePage() {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="/generation-document"
-              className="px-8 py-3.5 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-semibold text-base shadow-lg shadow-blue-500/20"
+              className="px-8 py-3.5 rounded-xl bg-[#0f1e3d] hover:bg-[#0a1428] text-white font-semibold text-base shadow-lg shadow-slate-900/10"
             >
               Voir le catalogue complet
             </Link>
@@ -166,7 +166,7 @@ export default function HomePage() {
       <section className="py-20 px-6">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <p className="text-blue-500 text-sm font-semibold uppercase tracking-widest mb-3">
+            <p className="text-emerald-700 text-sm font-semibold uppercase tracking-widest mb-3">
               Quatre familles, un catalogue
             </p>
             <h2 className="font-serif text-4xl font-bold text-slate-900 mb-4">
@@ -188,7 +188,7 @@ export default function HomePage() {
                   key={cat}
                   className="p-7 rounded-2xl border border-slate-200 bg-white shadow-premium hover:shadow-premium-hover transition"
                 >
-                  <p className="text-blue-500 text-xs font-semibold uppercase tracking-widest mb-2">
+                  <p className="text-emerald-700 text-xs font-semibold uppercase tracking-widest mb-2">
                     {content.byline}
                   </p>
                   <h3 className="font-serif text-2xl font-bold text-slate-900 mb-2">
@@ -200,7 +200,7 @@ export default function HomePage() {
                   <ul className="space-y-1 mb-5 text-sm text-slate-700">
                     {docs.slice(0, 4).map((doc) => (
                       <li key={doc.type} className="flex items-baseline gap-2">
-                        <span className="text-blue-500" aria-hidden="true">
+                        <span className="text-emerald-700" aria-hidden="true">
                           ·
                         </span>
                         <Link
@@ -219,7 +219,7 @@ export default function HomePage() {
                   </ul>
                   <Link
                     href="/generation-document"
-                    className="text-sm font-medium text-blue-500 hover:text-blue-600"
+                    className="text-sm font-medium text-emerald-700 hover:text-emerald-800"
                   >
                     Voir cette catégorie →
                   </Link>
@@ -245,7 +245,7 @@ export default function HomePage() {
             </div>
             <Link
               href="/generation-document"
-              className="text-sm font-medium text-blue-500 hover:text-blue-600 whitespace-nowrap"
+              className="text-sm font-medium text-emerald-700 hover:text-emerald-800 whitespace-nowrap"
             >
               Voir les {documents.length} documents →
             </Link>
@@ -256,9 +256,9 @@ export default function HomePage() {
               <Link
                 key={doc.type}
                 href={`/documents/${doc.type}`}
-                className="block p-5 rounded-2xl border border-slate-200 bg-white hover:border-blue-300 hover:shadow-premium transition"
+                className="block p-5 rounded-2xl border border-slate-200 bg-white hover:border-emerald-300 hover:shadow-premium transition"
               >
-                <p className="text-xs text-blue-500 font-semibold uppercase tracking-wider mb-1.5">
+                <p className="text-xs text-emerald-700 font-semibold uppercase tracking-wider mb-1.5">
                   {CATEGORY_LABELS[doc.category]}
                 </p>
                 <h3 className="font-serif text-lg font-semibold text-slate-900 mb-1">
@@ -283,7 +283,7 @@ export default function HomePage() {
       <section id="comment-ca-marche" className="py-20 px-6">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
-            <p className="text-blue-500 text-sm font-semibold uppercase tracking-widest mb-3">
+            <p className="text-emerald-700 text-sm font-semibold uppercase tracking-widest mb-3">
               Procédure
             </p>
             <h2 className="font-serif text-4xl font-bold text-slate-900 mb-4">
@@ -312,7 +312,7 @@ export default function HomePage() {
           <div className="text-center mt-10">
             <Link
               href="/comment-ca-marche"
-              className="text-sm font-medium text-blue-500 hover:text-blue-600"
+              className="text-sm font-medium text-emerald-700 hover:text-emerald-800"
             >
               Lire la méthode détaillée →
             </Link>
@@ -324,7 +324,7 @@ export default function HomePage() {
       <section id="garanties" className="py-20 px-6 bg-slate-50/60 border-y border-slate-100">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <p className="text-blue-500 text-sm font-semibold uppercase tracking-widest mb-3">
+            <p className="text-emerald-700 text-sm font-semibold uppercase tracking-widest mb-3">
               Ce qui nous distingue
             </p>
             <h2 className="font-serif text-4xl font-bold text-slate-900 mb-4">
@@ -365,14 +365,14 @@ export default function HomePage() {
           <div className="text-center mt-12 flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="/notre-methode"
-              className="text-sm font-medium text-blue-500 hover:text-blue-600"
+              className="text-sm font-medium text-emerald-700 hover:text-emerald-800"
             >
               Découvrir notre méthode →
             </Link>
             <span className="text-slate-300 hidden sm:inline">·</span>
             <Link
               href="/comment-nous-redigeons"
-              className="text-sm font-medium text-blue-500 hover:text-blue-600"
+              className="text-sm font-medium text-emerald-700 hover:text-emerald-800"
             >
               Comment nous rédigeons nos modèles →
             </Link>
@@ -384,7 +384,7 @@ export default function HomePage() {
       <section className="py-20 px-6">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
-            <p className="text-blue-500 text-sm font-semibold uppercase tracking-widest mb-3">
+            <p className="text-emerald-700 text-sm font-semibold uppercase tracking-widest mb-3">
               Situer notre offre
             </p>
             <h2 className="font-serif text-4xl font-bold text-slate-900 mb-4">
@@ -406,7 +406,7 @@ export default function HomePage() {
                   <th className="text-left py-4 px-3 font-serif text-sm text-slate-500 border-b border-slate-200 w-1/4">
                     Modèle gratuit
                   </th>
-                  <th className="text-left py-4 px-3 font-serif text-sm font-semibold text-blue-500 border-b border-slate-200 w-1/4 bg-blue-50/40">
+                  <th className="text-left py-4 px-3 font-serif text-sm font-semibold text-emerald-700 border-b border-slate-200 w-1/4 bg-emerald-50/40">
                     QuickLegal
                   </th>
                   <th className="text-left py-4 px-3 font-serif text-sm text-slate-500 border-b border-slate-200 w-1/4">
@@ -473,7 +473,7 @@ export default function HomePage() {
       <section className="py-20 px-6 bg-slate-50/60 border-y border-slate-100">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <p className="text-blue-500 text-sm font-semibold uppercase tracking-widest mb-3">
+            <p className="text-emerald-700 text-sm font-semibold uppercase tracking-widest mb-3">
               Cas d&apos;usage
             </p>
             <h2 className="font-serif text-4xl font-bold text-slate-900 mb-4">
@@ -527,7 +527,7 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
             <div>
-              <p className="text-blue-500 text-sm font-semibold uppercase tracking-widest mb-3">
+              <p className="text-emerald-700 text-sm font-semibold uppercase tracking-widest mb-3">
                 Avant de générer
               </p>
               <h2 className="font-serif text-4xl font-bold text-slate-900 mb-2">
@@ -540,7 +540,7 @@ export default function HomePage() {
             </div>
             <Link
               href="/guides"
-              className="text-sm font-medium text-blue-500 hover:text-blue-600 whitespace-nowrap"
+              className="text-sm font-medium text-emerald-700 hover:text-emerald-800 whitespace-nowrap"
             >
               Tous les guides →
             </Link>
@@ -554,9 +554,9 @@ export default function HomePage() {
                 <Link
                   key={guide.slug}
                   href={`/guides/${guide.slug}`}
-                  className="block p-5 rounded-2xl border border-slate-200 bg-white hover:border-blue-300 hover:shadow-premium transition"
+                  className="block p-5 rounded-2xl border border-slate-200 bg-white hover:border-emerald-300 hover:shadow-premium transition"
                 >
-                  <p className="text-xs text-blue-500 font-semibold uppercase tracking-wider mb-2">
+                  <p className="text-xs text-emerald-700 font-semibold uppercase tracking-wider mb-2">
                     {guide.eyebrow}
                   </p>
                   <h3 className="font-serif text-lg font-semibold text-slate-900 mb-2 leading-snug">
@@ -565,7 +565,7 @@ export default function HomePage() {
                   <p className="text-slate-500 text-xs leading-relaxed mb-3">
                     {guide.summary}
                   </p>
-                  <p className="text-blue-500 text-xs font-medium">
+                  <p className="text-emerald-700 text-xs font-medium">
                     Lire le guide →
                   </p>
                 </Link>
@@ -579,7 +579,7 @@ export default function HomePage() {
       <section className="py-20 px-6 bg-slate-50/40 border-y border-slate-100">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-10">
-            <p className="text-blue-500 text-sm font-semibold uppercase tracking-widest mb-3">
+            <p className="text-emerald-700 text-sm font-semibold uppercase tracking-widest mb-3">
               Questions fréquentes
             </p>
             <h2 className="font-serif text-4xl font-bold text-slate-900 mb-4">
@@ -612,7 +612,7 @@ export default function HomePage() {
           <div className="text-center mt-8">
             <Link
               href="/faq"
-              className="text-sm font-medium text-blue-500 hover:text-blue-600"
+              className="text-sm font-medium text-emerald-700 hover:text-emerald-800"
             >
               Toutes les questions fréquentes →
             </Link>
@@ -632,7 +632,7 @@ export default function HomePage() {
           </p>
           <Link
             href="/generation-document"
-            className="inline-block px-10 py-4 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-semibold text-lg shadow-xl shadow-blue-500/25"
+            className="inline-block px-10 py-4 rounded-xl bg-[#0f1e3d] hover:bg-[#0a1428] text-white font-semibold text-lg shadow-xl shadow-slate-900/15"
           >
             Voir le catalogue complet
           </Link>
@@ -684,7 +684,7 @@ function StepCard({
 }) {
   return (
     <div className="p-6 rounded-2xl border border-slate-200 bg-white shadow-premium">
-      <div className="font-serif text-5xl font-bold text-blue-200 mb-4">
+      <div className="font-serif text-5xl font-bold text-emerald-200 mb-4">
         {num}
       </div>
       <h3 className="font-serif text-xl font-semibold mb-3 text-slate-900">
@@ -698,9 +698,9 @@ function StepCard({
 function TrustCard({ title, body }: { title: string; body: string }) {
   return (
     <div className="p-6 rounded-2xl border border-slate-200 bg-white shadow-premium">
-      <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center mb-4">
+      <div className="w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center mb-4">
         <svg
-          className="w-5 h-5 text-blue-500"
+          className="w-5 h-5 text-emerald-700"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -740,7 +740,7 @@ function ComparisonRow({
       <td className="py-3 px-3 border-b border-slate-100 align-top text-slate-600">
         {free}
       </td>
-      <td className="py-3 px-3 border-b border-slate-100 align-top bg-blue-50/20 text-slate-900">
+      <td className="py-3 px-3 border-b border-slate-100 align-top bg-emerald-50/20 text-slate-900">
         {quicklegal}
       </td>
       <td className="py-3 px-3 border-b border-slate-100 align-top text-slate-600">
@@ -769,7 +769,7 @@ function UseCaseCard({
       <p className="text-slate-600 text-sm leading-relaxed mb-5">{body}</p>
       <Link
         href={primary.href}
-        className="inline-block px-5 py-2.5 rounded-lg bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium mb-4"
+        className="inline-block px-5 py-2.5 rounded-lg bg-[#0f1e3d] hover:bg-[#0a1428] text-white text-sm font-medium mb-4"
       >
         {primary.label} →
       </Link>
@@ -781,7 +781,7 @@ function UseCaseCard({
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="text-blue-500 hover:text-blue-600"
+                  className="text-emerald-700 hover:text-emerald-800"
                 >
                   {item.label}
                 </Link>

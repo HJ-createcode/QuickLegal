@@ -28,7 +28,7 @@ const TYPE_LABELS: Record<string, string> = {
 };
 
 const TYPE_COLORS: Record<string, string> = {
-  "statuts-sas": "bg-blue-50 text-blue-700 border-blue-200",
+  "statuts-sas": "bg-emerald-50 text-emerald-700 border-emerald-200",
   "statuts-sci": "bg-indigo-50 text-indigo-700 border-indigo-200",
   "cgv-ecommerce": "bg-emerald-50 text-emerald-700 border-emerald-200",
   nda: "bg-amber-50 text-amber-700 border-amber-200",
@@ -103,7 +103,7 @@ export default async function AdminPage() {
         <div className="max-w-7xl mx-auto flex items-center justify-between px-6 h-16">
           <div className="flex items-center gap-4">
             <Link href="/" className="font-serif text-xl font-bold text-slate-900">
-              Quick<span className="text-blue-500">Legal</span>
+              Quick<span className="text-emerald-700">Legal</span>
             </Link>
             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-50 border border-amber-200 text-amber-700 text-xs font-semibold">
               <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
@@ -319,7 +319,7 @@ export default async function AdminPage() {
                         {d.pdf_url ? (
                           <a
                             href={`/api/documents/${d.id}/download`}
-                            className="text-blue-500 hover:text-blue-600 font-medium"
+                            className="text-emerald-700 hover:text-emerald-800 font-medium"
                           >
                             Ouvrir
                           </a>

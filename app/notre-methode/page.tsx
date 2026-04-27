@@ -151,7 +151,7 @@ export default function NotreMethodePage() {
           <li>
             <Link
               href="/comment-nous-redigeons"
-              className="text-blue-500 hover:text-blue-600"
+              className="text-emerald-700 hover:text-emerald-800"
             >
               Comment nous rédigeons nos modèles
             </Link>{" "}
@@ -160,7 +160,7 @@ export default function NotreMethodePage() {
           <li>
             <Link
               href="/comment-ca-marche"
-              className="text-blue-500 hover:text-blue-600"
+              className="text-emerald-700 hover:text-emerald-800"
             >
               Comment ça marche
             </Link>{" "}
@@ -169,7 +169,7 @@ export default function NotreMethodePage() {
           <li>
             <Link
               href="/faq"
-              className="text-blue-500 hover:text-blue-600"
+              className="text-emerald-700 hover:text-emerald-800"
             >
               Questions fréquentes
             </Link>{" "}

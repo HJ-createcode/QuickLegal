@@ -45,7 +45,7 @@ export function SiteFooter() {
           <div className="col-span-2">
             <Link href="/" className="inline-block">
               <span className="font-serif text-2xl font-bold text-slate-900">
-                Quick<span className="text-blue-500">Legal</span>
+                Quick<span className="text-emerald-700">Legal</span>
               </span>
             </Link>
             <p className="text-slate-500 text-sm mt-2 max-w-xs leading-relaxed">

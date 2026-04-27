@@ -220,7 +220,7 @@ export default function SciIrOuIsPage() {
             constitution, ou par délibération ultérieure. Notre{" "}
             <a
               href="/documents/statuts-sci"
-              className="text-blue-500 hover:text-blue-600"
+              className="text-emerald-700 hover:text-emerald-800"
             >
               modèle de statuts de SCI
             </a>{" "}

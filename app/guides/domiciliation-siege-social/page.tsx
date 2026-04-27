@@ -240,7 +240,7 @@ export default function DomiciliationPage() {
             agrément), la pièce à produire est une{" "}
             <a
               href="/documents/attestation-domiciliation"
-              className="text-blue-500 hover:text-blue-600"
+              className="text-emerald-700 hover:text-emerald-800"
             >
               attestation de domiciliation
             </a>

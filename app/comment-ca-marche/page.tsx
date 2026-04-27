@@ -48,7 +48,7 @@ export default async function CommentCaMarchePage() {
         <div className="max-w-6xl mx-auto flex items-center justify-between px-6 h-16">
           <Link href="/" className="flex items-center gap-2">
             <span className="font-serif text-2xl font-bold tracking-tight text-slate-900">
-              Quick<span className="text-blue-500">Legal</span>
+              Quick<span className="text-emerald-700">Legal</span>
             </span>
           </Link>
           <div className="hidden md:flex items-center gap-8 text-sm">
@@ -66,7 +66,7 @@ export default async function CommentCaMarchePage() {
             {isLoggedIn ? (
               <Link
                 href="/dashboard"
-                className="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium shadow-sm"
+                className="px-4 py-2 rounded-lg bg-[#0f1e3d] hover:bg-[#0a1428] text-white text-sm font-medium shadow-sm"
               >
                 Mon espace
               </Link>
@@ -80,7 +80,7 @@ export default async function CommentCaMarchePage() {
                 </Link>
                 <Link
                   href="/signup"
-                  className="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium shadow-sm"
+                  className="px-4 py-2 rounded-lg bg-[#0f1e3d] hover:bg-[#0a1428] text-white text-sm font-medium shadow-sm"
                 >
                   Créer un compte
                 </Link>
@@ -93,7 +93,7 @@ export default async function CommentCaMarchePage() {
       {/* HEADER */}
       <section className="pt-36 pb-16 px-6 bg-gradient-to-b from-sky-50 via-white to-white">
         <div className="max-w-4xl mx-auto text-center">
-          <p className="text-blue-500 text-sm font-semibold uppercase tracking-widest mb-3">
+          <p className="text-emerald-700 text-sm font-semibold uppercase tracking-widest mb-3">
             Procédure
           </p>
           <h1 className="font-serif text-5xl sm:text-6xl font-bold tracking-tight mb-6 leading-[1.05] text-slate-900">
@@ -114,7 +114,7 @@ export default async function CommentCaMarchePage() {
               key={step.num}
               className="relative p-8 rounded-2xl bg-white border border-slate-200 shadow-premium"
             >
-              <div className="font-serif text-5xl font-bold text-blue-200 mb-4">
+              <div className="font-serif text-5xl font-bold text-emerald-200 mb-4">
                 {step.num}
               </div>
               <h3 className="font-serif text-xl font-semibold mb-3 text-slate-900">
@@ -131,9 +131,9 @@ export default async function CommentCaMarchePage() {
         <div className="max-w-4xl mx-auto">
           <div className="rounded-3xl bg-white border border-slate-200 shadow-premium p-10 sm:p-14">
             <div className="flex flex-col sm:flex-row items-start gap-8">
-              <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center">
+              <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center">
                 <svg
-                  className="w-7 h-7 text-blue-500"
+                  className="w-7 h-7 text-emerald-700"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -147,7 +147,7 @@ export default async function CommentCaMarchePage() {
                 </svg>
               </div>
               <div>
-                <p className="text-blue-500 text-sm font-semibold uppercase tracking-widest mb-2">
+                <p className="text-emerald-700 text-sm font-semibold uppercase tracking-widest mb-2">
                   Accès à vie
                 </p>
                 <h2 className="font-serif text-3xl font-bold text-slate-900 mb-4">
@@ -176,7 +176,7 @@ export default async function CommentCaMarchePage() {
           </p>
           <Link
             href="/generation-document"
-            className="inline-block px-10 py-4 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-semibold text-lg shadow-xl shadow-blue-500/25"
+            className="inline-block px-10 py-4 rounded-xl bg-[#0f1e3d] hover:bg-[#0a1428] text-white font-semibold text-lg shadow-xl shadow-slate-900/15"
           >
             Générer un document
           </Link>

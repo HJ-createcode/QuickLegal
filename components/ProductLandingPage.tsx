@@ -76,7 +76,7 @@ export function ProductLandingPage({ doc, content }: ProductLandingPageProps) {
             </ol>
           </nav>
 
-          <p className="text-blue-500 text-sm font-semibold uppercase tracking-widest mb-3">
+          <p className="text-emerald-700 text-sm font-semibold uppercase tracking-widest mb-3">
             {CATEGORY_LABELS[doc.category]}
           </p>
 
@@ -91,7 +91,7 @@ export function ProductLandingPage({ doc, content }: ProductLandingPageProps) {
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-6">
             <Link
               href={startUrl}
-              className="px-7 py-3.5 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-semibold text-base shadow-lg shadow-blue-500/20"
+              className="px-7 py-3.5 rounded-xl bg-[#0f1e3d] hover:bg-[#0a1428] text-white font-semibold text-base shadow-lg shadow-slate-900/10"
             >
               Commencer le questionnaire
             </Link>
@@ -145,7 +145,7 @@ export function ProductLandingPage({ doc, content }: ProductLandingPageProps) {
             <ul className="space-y-2">
               {content.audience.items.map((item) => (
                 <li key={item} className="flex gap-3 text-sm text-slate-700">
-                  <span className="text-blue-500 flex-shrink-0">•</span>
+                  <span className="text-emerald-700 flex-shrink-0">•</span>
                   <span>{item}</span>
                 </li>
               ))}
@@ -161,7 +161,7 @@ export function ProductLandingPage({ doc, content }: ProductLandingPageProps) {
             <ul className="space-y-2">
               {content.timing.items.map((item) => (
                 <li key={item} className="flex gap-3 text-sm text-slate-700">
-                  <span className="text-blue-500 flex-shrink-0">•</span>
+                  <span className="text-emerald-700 flex-shrink-0">•</span>
                   <span>{item}</span>
                 </li>
               ))}
@@ -186,7 +186,7 @@ export function ProductLandingPage({ doc, content }: ProductLandingPageProps) {
                 className="flex gap-3 items-start text-sm text-slate-700"
               >
                 <svg
-                  className="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5"
+                  className="w-4 h-4 text-emerald-700 flex-shrink-0 mt-0.5"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -306,7 +306,7 @@ export function ProductLandingPage({ doc, content }: ProductLandingPageProps) {
           </p>
           <Link
             href={startUrl}
-            className="inline-block px-10 py-4 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-semibold text-lg shadow-xl shadow-blue-500/25"
+            className="inline-block px-10 py-4 rounded-xl bg-[#0f1e3d] hover:bg-[#0a1428] text-white font-semibold text-lg shadow-xl shadow-slate-900/15"
           >
             Commencer le questionnaire
           </Link>
@@ -379,9 +379,9 @@ export function ProductLandingPage({ doc, content }: ProductLandingPageProps) {
                 <Link
                   key={related.type}
                   href={`/documents/${related.type}`}
-                  className="block p-5 rounded-2xl border border-slate-200 bg-white hover:border-blue-300 hover:shadow-premium transition"
+                  className="block p-5 rounded-2xl border border-slate-200 bg-white hover:border-emerald-300 hover:shadow-premium transition"
                 >
-                  <p className="text-xs text-blue-500 font-semibold uppercase tracking-wider mb-2">
+                  <p className="text-xs text-emerald-700 font-semibold uppercase tracking-wider mb-2">
                     {CATEGORY_LABELS[related.category]}
                   </p>
                   <h3 className="font-serif text-lg font-semibold text-slate-900 mb-1">
@@ -411,7 +411,7 @@ export function ProductLandingPage({ doc, content }: ProductLandingPageProps) {
           </p>
           <Link
             href={startUrl}
-            className="inline-block px-10 py-4 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-semibold text-lg shadow-xl shadow-blue-500/25"
+            className="inline-block px-10 py-4 rounded-xl bg-[#0f1e3d] hover:bg-[#0a1428] text-white font-semibold text-lg shadow-xl shadow-slate-900/15"
           >
             Commencer maintenant
           </Link>
@@ -483,7 +483,7 @@ function HowItWorksStep({
 }) {
   return (
     <div className="p-6 rounded-2xl border border-slate-200 bg-white shadow-premium">
-      <div className="font-serif text-4xl font-bold text-blue-200 mb-3">
+      <div className="font-serif text-4xl font-bold text-emerald-200 mb-3">
         {num}
       </div>
       <h3 className="font-serif text-lg font-semibold text-slate-900 mb-2">
