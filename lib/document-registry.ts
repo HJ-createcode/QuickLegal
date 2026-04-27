@@ -218,7 +218,7 @@ export const DOCUMENT_REGISTRY: DocumentDefinition[] = [
     label: "Statuts de SAS",
     longLabel: "Statuts de SAS",
     category: "statuts",
-    priceCents: 7900,
+    priceCents: 4900,
     originalPriceDisplay: "1 500",
     description:
       "Statuts complets avec clauses d'agrément, répartition du capital, nomination du président.",
@@ -248,7 +248,7 @@ export const DOCUMENT_REGISTRY: DocumentDefinition[] = [
     label: "Statuts de SCI",
     longLabel: "Statuts de SCI",
     category: "statuts",
-    priceCents: 8900,
+    priceCents: 5900,
     originalPriceDisplay: "1 800",
     description:
       "Société civile immobilière avec gérance, parts sociales et régime fiscal au choix.",
@@ -275,7 +275,7 @@ export const DOCUMENT_REGISTRY: DocumentDefinition[] = [
     label: "CGV E-commerce",
     longLabel: "Conditions Générales de Vente E-commerce",
     category: "commercial",
-    priceCents: 4900,
+    priceCents: 2900,
     originalPriceDisplay: "900",
     description:
       "Conditions générales de vente conformes au Code de la consommation et au RGPD.",
@@ -302,7 +302,7 @@ export const DOCUMENT_REGISTRY: DocumentDefinition[] = [
     label: "Accord de confidentialité (NDA)",
     longLabel: "Accord de confidentialité",
     category: "commercial",
-    priceCents: 3900,
+    priceCents: 1900,
     originalPriceDisplay: "500",
     description:
       "Accord de confidentialité unilatéral ou réciproque, adapté à votre contexte.",
@@ -330,7 +330,7 @@ export const DOCUMENT_REGISTRY: DocumentDefinition[] = [
     label: "Mentions légales",
     longLabel: "Mentions légales de site web",
     category: "conformite",
-    priceCents: 1900,
+    priceCents: 900,
     originalPriceDisplay: "300",
     description:
       "Mentions légales complètes conformes à la LCEN et au Code de la consommation.",
@@ -369,7 +369,7 @@ export const DOCUMENT_REGISTRY: DocumentDefinition[] = [
     label: "Conditions Générales d'Utilisation (CGU)",
     longLabel: "Conditions Générales d'Utilisation",
     category: "conformite",
-    priceCents: 2900,
+    priceCents: 1900,
     originalPriceDisplay: "500",
     description:
       "CGU adaptées à votre service, qu'il soit gratuit ou payant, B2C ou B2B.",
@@ -408,7 +408,7 @@ export const DOCUMENT_REGISTRY: DocumentDefinition[] = [
     label: "Attestation de domiciliation",
     longLabel: "Attestation de domiciliation du siège social",
     category: "statuts",
-    priceCents: 900,
+    priceCents: 500,
     originalPriceDisplay: "100",
     description:
       "Autorisation écrite d'établir le siège social d'une société à une adresse donnée.",
@@ -445,7 +445,7 @@ export const DOCUMENT_REGISTRY: DocumentDefinition[] = [
     label: "Déclaration de non-condamnation",
     longLabel: "Déclaration sur l'honneur de non-condamnation",
     category: "statuts",
-    priceCents: 900,
+    priceCents: 500,
     originalPriceDisplay: "100",
     description:
       "Déclaration exigée par le greffe pour nommer un dirigeant, avec mention de filiation.",
@@ -489,7 +489,7 @@ export const DOCUMENT_REGISTRY: DocumentDefinition[] = [
     label: "PV d'Assemblée Générale Ordinaire",
     longLabel: "Procès-verbal d'Assemblée Générale Ordinaire",
     category: "gouvernance",
-    priceCents: 2900,
+    priceCents: 1900,
     originalPriceDisplay: "400",
     description:
       "PV d'AGO avec approbation des comptes, affectation du résultat et quitus aux dirigeants.",
@@ -531,7 +531,7 @@ export const DOCUMENT_REGISTRY: DocumentDefinition[] = [
     label: "PV d'Assemblée Générale Extraordinaire",
     longLabel: "Procès-verbal d'Assemblée Générale Extraordinaire",
     category: "gouvernance",
-    priceCents: 3900,
+    priceCents: 2900,
     originalPriceDisplay: "600",
     description:
       "PV d'AGE : modification des statuts, transfert de siège, augmentation de capital, dissolution, etc.",
@@ -574,7 +574,7 @@ export const DOCUMENT_REGISTRY: DocumentDefinition[] = [
     label: "Convocation d'Assemblée Générale",
     longLabel: "Convocation à Assemblée Générale",
     category: "gouvernance",
-    priceCents: 900,
+    priceCents: 500,
     originalPriceDisplay: "100",
     description:
       "Lettre de convocation personnalisée, à envoyer à chaque associé dans le respect du préavis statutaire.",
@@ -615,7 +615,7 @@ export const DOCUMENT_REGISTRY: DocumentDefinition[] = [
     label: "Ordre du jour d'Assemblée Générale",
     longLabel: "Ordre du jour d'Assemblée Générale",
     category: "gouvernance",
-    priceCents: 900,
+    priceCents: 500,
     originalPriceDisplay: "100",
     description:
       "Document formel listant les points soumis au vote, annexé à la convocation.",
@@ -652,7 +652,7 @@ export const DOCUMENT_REGISTRY: DocumentDefinition[] = [
     label: "Feuille de présence d'Assemblée Générale",
     longLabel: "Feuille de présence d'Assemblée Générale",
     category: "gouvernance",
-    priceCents: 900,
+    priceCents: 500,
     originalPriceDisplay: "100",
     description:
       "Feuille de présence à faire signer par chaque participant, annexée au PV de l'assemblée.",

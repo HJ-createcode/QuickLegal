@@ -120,13 +120,6 @@ export default function HomePage() {
       {/* HERO */}
       <section className="pt-36 pb-20 px-6 bg-gradient-to-b from-sky-50 via-white to-white">
         <div className="max-w-5xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-50 border border-amber-200/60 text-amber-700 text-xs font-semibold mb-8 shadow-sm">
-            <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-            </svg>
-            Droit français · Revu par un avocat au Barreau de Paris
-          </div>
-
           <h1 className="font-serif text-5xl sm:text-7xl font-bold tracking-tight mb-8 leading-[1.05] text-slate-900">
             Vos documents juridiques,
             <br />

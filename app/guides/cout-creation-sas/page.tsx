@@ -62,23 +62,23 @@ export default function CoutCreationSasPage() {
           {
             slug: "statuts-sas",
             label: "Statuts de SAS",
-            priceEuros: 79,
+            priceEuros: 49,
             description:
-              "Statuts complets revus par un avocat au Barreau de Paris. Tout le poste « rédaction des statuts » à 79 € TTC au lieu de plusieurs centaines d'euros en cabinet.",
+              "Statuts complets revus par un avocat au Barreau de Paris. Tout le poste « rédaction des statuts » à 49 € TTC au lieu de plusieurs centaines d'euros en cabinet.",
           },
           {
             slug: "declaration-non-condamnation",
             label: "Déclaration de non-condamnation",
-            priceEuros: 9,
+            priceEuros: 5,
             description:
-              "Pièce obligatoire exigée par le greffe pour chaque dirigeant — 9 € TTC.",
+              "Pièce obligatoire exigée par le greffe pour chaque dirigeant — 5 € TTC.",
           },
           {
             slug: "attestation-domiciliation",
             label: "Attestation de domiciliation",
-            priceEuros: 9,
+            priceEuros: 5,
             description:
-              "Autorisation d'établir le siège à une adresse, exigée au greffe — 9 € TTC.",
+              "Autorisation d'établir le siège à une adresse, exigée au greffe — 5 € TTC.",
           },
         ]}
         related={[
@@ -143,8 +143,8 @@ export default function CoutCreationSasPage() {
             />
             <OptionCard
               title="Legaltech (dont QuickLegal)"
-              price="80 à 300 € TTC"
-              description="Questionnaire guidé, trame revue par un juriste, souvent validée par un avocat. Nos statuts de SAS à 79 € TTC intègrent les clauses d'agrément, de préemption et la structuration du pouvoir du Président."
+              price="49 à 300 € TTC"
+              description="Questionnaire guidé, trame revue par un juriste, souvent validée par un avocat. Nos statuts de SAS à 49 € TTC intègrent les clauses d'agrément, de préemption et la structuration du pouvoir du Président."
               caveat="Exclusions habituelles : structurations très spécifiques (holding complexe, actions de préférence, classes d'actions multiples). Pour ces cas, un avocat reste pertinent."
             />
             <OptionCard
@@ -196,7 +196,7 @@ export default function CoutCreationSasPage() {
               >
                 déclaration de non-condamnation
               </a>{" "}
-              est requise pour chaque Président nommé — 9 € TTC chez
+              est requise pour chaque Président nommé — 5 € TTC chez
               QuickLegal, souvent facturée 30 à 50 € ailleurs.
             </li>
           </ul>
@@ -217,7 +217,7 @@ export default function CoutCreationSasPage() {
               </thead>
               <tbody className="text-slate-700">
                 <Row a="Modèle gratuit + formalités seules (risque élevé)" b="≈ 250 €" c="" />
-                <Row a="QuickLegal (statuts 79 € + pièces 18 € + formalités)" b="≈ 350 €" c="" />
+                <Row a="QuickLegal (statuts 49 € + pièces 10 € + formalités)" b="≈ 310 €" c="" />
                 <Row a="Legaltech standard + formalités" b="≈ 400 à 600 €" c="" />
                 <Row a="Avocat « starter » + formalités" b="≈ 1 300 à 2 500 €" c="" />
                 <Row a="Avocat + pacte d'associés + opérations complexes" b="≈ 3 000 à 6 000 €" c="" />

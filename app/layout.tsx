@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Fraunces } from "next/font/google";
 import "./globals.css";
 import { SessionProviderWrapper } from "@/components/SessionProviderWrapper";
 import { JsonLd } from "@/components/JsonLd";
@@ -9,19 +8,6 @@ import {
   SITE_URL,
   SITE_URL_OBJECT,
 } from "@/lib/site-url";
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
-  subsets: ["latin"],
-  display: "swap",
-  weight: ["400", "500", "600", "700", "800"],
-});
 
 /**
  * Root metadata.
@@ -112,10 +98,7 @@ export default function RootLayout({
   };
 
   return (
-    <html
-      lang="fr"
-      className={`${inter.variable} ${fraunces.variable} h-full antialiased`}
-    >
+    <html lang="fr" className="h-full antialiased">
       <body className="min-h-full flex flex-col bg-[#fafbff] text-slate-900">
         <SessionProviderWrapper>{children}</SessionProviderWrapper>
         <JsonLd data={organizationJsonLd} id="ld-organization" />
